@@ -1,0 +1,979 @@
+listing 1
+class summation {
+  int num;
+  long sum; // summation of num
+public:
+  void set_sum(int n);
+  void show_sum() {
+    cout << num << " summed is " << sum << "\n";
+  }
+};
+
+void summation::set_sum(int n)
+{
+  int i;
+  num = n;
+
+  sum = 0;
+  for(i=1; i<=n; i++)
+    sum += i;
+}
+
+listing 2
+class myclass {
+  int num;
+public:
+  myclass(int x) { num = x; }
+};
+
+listing 3
+#include <iostream>
+using namespace std;
+ 
+class samp {
+  int a;
+public:
+  void set_a(int n) { a = n; }
+  int get_a() { return a; }
+};
+
+int main()
+{
+  samp ob[4];
+  int i;
+
+  for(i=0; i<4; i++) ob[i].set_a(i);
+
+  for(i=0; i<4; i++) cout << ob[i].get_a( );
+
+  cout << "\n";
+
+  return 0;
+}
+
+listing 4
+// Initialize an array.
+#include <iostream>
+using namespace std;
+ 
+class samp {
+  int a;
+public:
+  samp(int n) { a = n; }
+  int get_a() { return a; }
+};
+
+int main()
+{
+  samp ob[4] = { -1, -2, -3, -4 };
+  int i;
+
+  for(i=0; i<4; i++) cout << ob[i].get_a() << ' ';
+
+  cout << "\n";
+
+  return 0;
+}
+
+
+listing 5
+samp ob[4] = { samp(-1), samp(- 2),
+               samp(-3), samp(- 4) };
+
+listing 6
+// Create a two-dimensional array of objects.
+#include <iostream>
+using namespace std;
+
+class samp {
+  int a;
+public:
+  samp(int n) { a = n; }
+  int get_a() { return a; }
+};
+
+int main()
+{
+  samp ob[4][2] = {
+    1, 2,
+    3, 4,
+    5, 6,
+    7, 8
+  };
+  int i;
+
+  
+  for(i=0; i<4; i++) {
+    cout << ob[i][0].get_a() << ' ';
+    cout << ob[i][1].get_a() << "\n";
+  }
+
+  cout << "\n";
+
+  return 0;
+}
+
+listing 7
+#include <iostream>
+using namespace std;
+
+class samp {
+  int a, b;
+public:
+  samp(int n, int m) { a = n; b = m; }
+  int get_a() { return a; }
+  int get_b() { return b; }
+};
+
+int main()
+{
+  samp ob[4][2] = {
+    samp(1, 2), samp(3, 4), 
+    samp(5, 6), samp(7, 8),
+    samp(9, 10), samp(11, 12),
+    samp(13, 14), samp(15, 16)
+  };
+
+  int i;
+
+  for(i=0; i<4; i++) {
+    cout << ob[i][0].get_a() << ' ';
+    cout << ob[i][0].get_b() << "\n";
+    cout << ob[i][1].get_a() << ' ';
+    cout << ob[i][1].get_b() << "\n";
+  }
+
+  cout << "\n";
+
+  return 0;
+}
+
+listing 8
+#include <iostream>
+using namespace std;
+
+class letters {
+  char ch;
+public:
+  letters(char c) { ch = c; }
+  char get_ch() { return ch; }
+};
+
+listing 9
+#include <iostream>
+using namespace std;
+
+class squares {
+  int num, sqr;
+public:
+  squares(int a, int b) { num = a; sqr = b; }
+  void show() {cout << num << ' ' << sqr << "\n"; }
+};
+
+listing 10
+// Pointers to objects.
+#include <iostream>
+using namespace std;
+
+class samp {
+  int a, b;
+public:
+  samp(int n, int m) { a = n; b = m; }
+  int get_a() { return a; }
+  int get_b() { return b; }
+};
+
+int main()
+{
+  samp ob[4] = {
+    samp(1, 2), 
+    samp(3, 4), 
+    samp(5, 6), 
+    samp(7, 8)
+  }; 
+  int i;
+
+  samp *p;
+  p = ob; // get starting address of array
+
+  for(i=0; i<4; i++) {
+    cout << p->get_a() << ' ';
+    cout << p->get_b() << "\n";
+    p++;  // advance to next object
+  }
+
+  cout << "\n";
+
+  return 0;
+}
+
+listing 11
+ob.f1();  // assume that ob is an object
+
+listing 12
+// Demonstrate the this pointer.
+#include <iostream>
+#include <cstring>
+using namespace std;
+
+class inventory {
+  char item[20];
+  double cost;
+  int on_hand;
+public:
+  inventory(char *i, double c, int o)
+  {
+     strcpy(item, i);
+     cost = c;
+     on_hand = o;
+   }
+   void show();
+};
+
+void inventory::show()
+{
+  cout << item;
+  cout << ": $" << cost;
+  cout << "  On hand: " << on_hand << "\n";
+}
+
+int main()
+{
+  inventory ob("wrench", 4.95, 4);
+
+  ob.show();
+
+  return 0;
+}
+
+listing 13
+// Demonstrate the this pointer.
+#include <iostream>
+#include <cstring>
+using namespace std;
+
+class inventory {
+  char item[20];
+  double cost;
+  int on_hand;
+public:
+  inventory(char *i, double c, int o)
+  {
+     strcpy(this->item, i); // access members
+     this->cost = c;  // through the this
+     this->on_hand = o; // pointer
+   }
+   void show();
+};
+
+void inventory::show()
+{
+  cout << this->item; // use this to access members
+  cout << ": $" << this->cost;
+  cout << "  On hand: " << this->on_hand << "\n";
+}
+
+int main()
+{
+  inventory ob("wrench", 4.95, 4);
+
+  ob.show();
+
+  return 0;
+}
+
+listing 14
+#include <iostream>
+using namespace std;
+
+class myclass {
+  int a, b;
+public: 
+  myclass(int n, int m) { a = n; b = m; }
+  int add() { return a+b; }
+  void show();
+};
+
+void myclass::show()
+{
+  int t;
+
+  t = add(); // call member function
+  cout << t << "\n";
+}
+
+int main()
+{
+  myclass ob(10, 14);
+
+  ob.show();
+
+  return 0;
+}
+
+listing 15
+// A simple example of new and delete.
+#include <iostream>
+using namespace std;
+
+int main()
+{
+  int *p;
+
+  p = new int; // allocate room for an integer
+  if(!p) { 
+    cout << "Allocation error\n";
+    return 1;
+  }
+
+  *p = 1000;
+
+  cout << "Here is integer at p: " << *p << "\n";
+
+  delete p;  // release memory
+
+  return 0;
+}
+
+listing 16
+// Allocating dynamic objects.
+#include <iostream>
+using namespace std;
+
+class samp {
+  int i, j;
+public:
+  void set_ij(int a, int b) { i=a; j=b; }
+  int get_product() { return i*j; }
+};
+
+int main()
+{
+  samp *p;
+
+  p = new samp; // allocate object
+  if(!p) {
+    cout << "Allocation error\n";
+    return 1;
+  }
+
+  p->set_ij(4, 5);
+
+  cout << "Product is: " << p->get_product() << "\n";
+
+  return 0;
+}
+
+listing 17
+// An example of initializing a dynamic variable.
+#include <iostream>
+using namespace std;
+
+int main()
+{
+  int *p;
+
+  p = new int(9); // give initial value of 9
+
+  if(!p) {
+    cout << "Allocation error\n";
+    return 1;
+  }
+
+  cout << "Here is integer at p: " << *p << "\n";
+
+  delete p;  // release memory
+
+  return 0;
+}
+
+listing 18
+// Allocating dynamic objects.
+#include <iostream>
+using namespace std;
+
+class samp {
+  int i, j;
+public:
+  samp(int a, int b) { i=a; j=b; }
+  int get_product() { return i*j; }
+};
+
+int main()
+{
+  samp *p;
+
+  p = new samp(6, 5); // allocate object with initialization
+  if(!p) {
+    cout << "Allocation error\n";
+    return 1;
+  }
+
+  cout << "Product is: " << p->get_product() << "\n";
+
+  delete p;
+
+  return 0;
+}
+
+listing 19
+// A simple example of new and delete.
+#include <iostream>
+using namespace std;
+
+int main()
+{
+  int *p;
+
+  p = new int [5]; // allocate room for 5 integers
+
+  // always make sure that allocation succeeded
+  if(!p) {
+    cout << "Allocation error\n";
+    return 1;
+  }
+
+  int i;
+
+  for(i=0; i<5; i++) p[i] = i;
+
+  for(i=0; i<5; i++) {
+    cout << "Here is integer at p[" << i << "]: ";
+    cout << p[i] << "\n";
+  }
+
+  delete [] p;  // release memory
+
+  return 0;
+}
+
+listing 20
+// Allocating dynamic objects.
+#include <iostream>
+using namespace std;
+
+class samp {
+  int i, j;
+public:
+  void set_ij(int a, int b) { i=a; j=b; }
+  int get_product() { return i*j; }
+};
+
+int main()
+{
+  samp *p;
+  int i;
+
+  p = new samp [10]; // allocate object array
+  if(!p) {
+    cout << "Allocation error\n";
+    return 1;
+  }
+
+  for(i=0; i<10; i++) 
+    p[i].set_ij(i, i);
+
+  for(i=0; i<10; i++) {
+    cout << "Product [" << i << "] is: ";
+    cout << p[i].get_product() << "\n";
+  }
+  delete [] p;
+  return 0;
+}
+
+listing 21
+// Allocating dynamic objects.
+#include <iostream>
+using namespace std;
+
+class samp {
+  int i, j;
+public:
+  void set_ij(int a, int b) { i=a; j=b; }
+  ~samp() { cout << "Destroying...\n"; }
+  int get_product() { return i*j; }
+};
+
+int main()
+{
+  samp *p;
+  int i;
+
+  p = new samp [10]; // allocate object array
+  if(!p) {
+    cout << "Allocation error\n";
+    return 1;
+  }
+
+  for(i=0; i<10; i++) 
+    p[i].set_ij(i, i);
+
+  for(i=0; i<10; i++) {
+    cout << "Product [" << i << "] is: ";
+    cout << p[i].get_product() << "\n";
+  }
+
+  delete [] p;
+  return 0;
+}
+
+listing 22
+char *p;
+
+p = (char *) malloc(100);
+// ...
+strcpy(p, "This is a test");
+
+listing 23
+#include <iostream> 
+using namespace std;
+
+void f(int *n);  // use a pointer parameter
+
+int main()
+{
+  int i = 0;
+
+  f(&i); 
+
+  cout << "Here is i's new value: " << i << '\n';
+
+  return 0;
+}
+
+void f(int *n)
+{
+  *n = 100; // put 100 into the argument pointed to by n
+}
+
+listing 24
+#include <iostream>
+using namespace std;
+
+void f(int &n); // declare a reference parameter
+
+int main()
+{
+  int i = 0;
+
+  f(i); 
+
+  cout << "Here is i's new value: " << i << '\n';
+
+  return 0;
+}
+
+// f() now uses a reference parameter
+void f(int &n)
+{
+  // notice that no * is needed in the following statement
+  n = 100; // put 100 into the argument used to call f()
+}
+
+listing 25
+n = 100;
+
+listing 26
+n++;
+
+listing 27
+#include <iostream>
+using namespace std;
+
+void swapargs(int &x, int &y);
+
+int main()
+{
+  int i, j;
+
+  i = 10;
+  j = 19;
+
+  cout << "i: " << i << ", ";
+  cout << "j: " << j << "\n";
+
+  swapargs(i, j);
+
+  cout << "After swapping: ";
+  cout << "i: " << i << ", ";
+  cout << "j: " << j << "\n";
+
+  return 0;
+}
+
+void swapargs(int &x, int &y)
+{
+  int t;
+
+  t = x;
+  x = y;
+  y = t;
+}
+
+listing 28
+void swapargs(int *x, int *y)
+{
+  int t;
+
+  t = *x;
+  *x = *y;
+  *y = t;
+}
+
+listing 29
+#include <iostream>
+#include <cmath>
+using namespace std;
+
+void round(double &num);
+
+int main()
+{
+  double i = 100.4;
+
+  cout << i << " rounded is ";
+  round(i);
+  cout << i << "\n";
+
+  i = 10.9;
+  cout << i << " rounded is ";
+  round(i);
+  cout << i << "\n";
+
+  return 0;
+}
+
+void round(double &num)
+{
+  double frac;
+  double val;
+
+  // decompose num into whole and fractional parts
+  frac =  modf(num, &val);
+
+  if(frac < 0.5) num = val;
+  else num = val+1.0;
+}
+
+listing 30
+// This program has an error.
+#include <iostream>
+using namespace std;
+
+void triple(double &num);
+
+int main()
+{
+  double d = 7.0;
+
+  triple(&d);
+
+  cout << d;
+
+  return 0;
+}
+
+// Triple num's value.
+void triple(double &num)
+{
+  num = 3 * num;
+}
+
+listing 31
+#include <iostream>
+using namespace std;
+
+class myclass {
+  int who;
+public:
+  myclass(int n) { 
+    who = n;
+    cout << "Constructing " << who << "\n";
+  }
+  ~myclass() { cout << "Destructing " << who << "\n"; }
+  int id() { return who; }
+};
+
+// o is passed by value.
+void f(myclass o)
+{
+  cout << "Received " << o.id() << "\n";
+}
+
+int main()
+{
+  myclass  x(1);
+
+  f(x);
+
+  return 0;
+}
+
+listing 32
+#include <iostream>
+using namespace std;
+
+class myclass {
+  int who;
+public:
+  myclass(int n) { 
+    who = n;
+    cout << "Constructing " << who << "\n";
+  }
+  ~myclass() { cout << "Destructing " << who << "\n"; }
+  int id() { return who; }
+};
+
+// Now, o is passed by reference.
+void f(myclass &o)
+{
+  // note that . operator is still used!!!
+  cout << "Received " << o.id() << "\n";
+}
+
+int main()
+{
+  myclass  x(1);
+
+  f(x);
+
+  return 0;
+}
+
+listing 33
+// This program has an error.
+#include <iostream>
+#include <cstring>
+#include <cstdlib>
+using namespace std;
+
+class strtype {
+  char *p;
+public:
+  strtype(char *s);
+  ~strtype() { delete [] p; }
+  char *get() { return p; }
+};
+
+strtype::strtype(char *s)
+{
+  int l;
+
+  l = strlen(s)+1;
+
+  p = new char [l];
+  if(!p) {
+    cout << "Allocation error\n";
+    exit(1);
+  }
+
+  strcpy(p, s);
+}
+
+void show(strtype x)
+{
+  char *s;
+   
+  s = x.get();
+  cout << s << "\n";
+}
+
+int main()
+{
+  strtype a("Hello"), b("There");
+
+  show(a);
+  show(b);
+
+  return 0;
+}
+
+listing 34
+// A simple example of a function returning a reference.
+#include <iostream>
+using namespace std;
+
+int &f(); // return a reference
+int x;
+
+int main()
+{
+  f() = 100; // assign 100 to reference returned by f()
+
+  cout << x << "\n";
+
+  return 0;
+}
+
+// Return an int reference.
+int &f()
+{
+  return x;  // returns a reference to x
+}
+
+listing 35
+return x;
+
+listing 36
+f() = 100;
+
+listing 37
+// Return an int reference.
+int &f()
+{
+  int x; // x is now a local variable
+  return x;  // returns a reference to x
+}
+
+listing 38
+// A simple bounded array example.
+#include <iostream>
+#include <cstdlib>
+using namespace std;
+
+class array {
+  int size;
+  char *p;
+public:
+  array(int num);
+  ~array() { delete [] p; }
+  char &put(int i);
+  char get(int i);
+};
+
+array::array(int num)
+{
+  p = new char [num];
+  if(!p) {
+    cout << "Allocation error\n";
+    exit(1);
+  }
+  size = num;
+}
+
+// Put something into the array.
+char &array::put(int i)
+{
+  if(i<0 || i>=size) {
+    cout << "Bounds error!!!\n";
+    exit(1);
+  }
+  return p[i];  // return reference to p[i]
+}
+
+// Get something from the array.
+char array::get(int i)
+{
+  if(i<0 || i>=size) {
+    cout << "Bounds error!!!\n";
+    exit(1);
+  }
+  return p[i]; // return character
+}
+  
+int main()
+{
+  array a(10);
+
+  a.put(3) = 'X';
+  a.put(2) = 'R';
+
+  cout << a.get(3) << a.get(2);
+  cout << "\n";
+
+  // now generate run-time boundary error
+  a.put(11) = '!';
+
+  return 0;
+}
+
+listing 39
+int &f();
+.
+.
+.
+int *x;
+
+x = f();
+
+listing 40
+#include <iostream>
+using namespace std;
+
+int main()
+{
+  int x;
+  int &ref = x; // create an independent reference
+
+  x = 10;  // these two statements
+  ref = 10;  // are functionally equivalent
+
+  ref = 100;
+  // this prints the number 100 twice
+  cout << x << ' ' << ref << "\n";
+
+  return 0;
+}
+
+listing 41
+const int &ref = 10;
+
+listing 42
+class a_type {
+  double a, b;
+public:
+  a_type(double x, double y) {
+    a = x; 
+    b = y;
+  }
+  void show() { cout << a << ' ' << b << "\n"; }
+};
+
+listing 43
+#include <iostream>
+#include <cstring>
+#include <cstdlib>
+using namespace std;
+
+class strtype {
+  char *p;
+  int len;
+public:
+  strtype(char *ptr);
+  ~strtype();
+  void show();
+};
+
+strtype::strtype(char *ptr)
+{
+  len = strlen(ptr);
+  p = (char *) malloc(len+1);
+  if(!p) {
+    cout << "Allocation error\n";
+    exit(1);
+  }
+  strcpy(p, ptr);
+}
+
+strtype::~strtype()
+{
+  cout << "Freeing p\n";
+  free(p);
+}
+
+void strtype::show()
+{
+  cout << p << " - length: " << len;
+  cout << "\n";
+}
+
+int main()
+{
+  strtype s1("This is a test."), s2("I like C++.");
+
+  s1.show();
+  s2.show();
+
+  return 0;
+}
+
