@@ -1,0 +1,734 @@
+listing 1
+class widgit {
+  int x, y;
+public:
+  // ... fill in constructor and destructor functions
+};
+
+listing 2
+class planet {
+  int moons;
+  double dist_from_sun;
+  double diameter;
+  double mass;
+public:
+ // ...
+};
+
+listing 3
+class sample {
+  int a;
+  char c;
+public:
+  sample(int x, char ch) { a = x; c = ch; }
+  // ...
+};
+
+listing 4
+// An example of object assignment.
+#include <iostream>
+using namespace std;
+
+class myclass {
+  int a, b;
+public:
+  void set(int i, int j) { a = i; b = j; }
+  void show() { cout << a << ' ' << b << "\n"; }
+};
+
+int main()
+{
+  myclass o1, o2;
+
+  o1.set(10, 4);
+
+  // assign o1 to o2
+  o2 = o1;
+
+  o1.show();
+  o2.show();
+
+  return 0;
+}
+
+listing 5
+// This program has an error.
+#include <iostream>
+using namespace std;
+
+class myclass {
+  int a, b;
+public:
+  void set(int i, int j) { a = i; b = j; }
+  void show() { cout << a << ' ' << b << "\n"; }
+};
+
+/* This class is similar to myclass but uses a 
+   different class name and thus appears as a different
+   type to the compiler.
+*/
+class yourclass {
+  int a, b;
+public:
+  void set(int i, int j) { a = i; b = j; }
+  void show() { cout << a << ' ' << b << "\n"; }
+};
+
+int main()
+{
+  myclass o1;
+  yourclass o2;
+
+  o1.set(10, 4);
+
+  o2 = o1; // ERROR, objects not of same type
+
+  o1.show();
+  o2.show();
+
+  return 0;
+}
+
+listing 6
+#include <iostream>
+using namespace std;
+
+#define SIZE 10
+
+// Declare a stack class for characters.
+class stack { 
+  char stck[SIZE]; // holds the stack
+  int tos; // index of top-of-stack
+public:
+  stack(); // constructor
+  void push(char ch); // push character on stack
+  char pop(); // pop character from stack
+};
+
+// Initialize the stack.
+stack::stack()
+{
+  cout << "Constructing a stack\n";
+  tos = 0;
+}
+
+// Push a character.
+void stack::push(char ch)
+{
+  if(tos==SIZE) {
+    cout << "Stack is full\n";
+    return;
+  }
+  stck[tos] = ch;
+  tos++;
+}
+
+// Pop a character.
+char stack::pop()
+{
+  if(tos==0) {
+    cout << "Stack is empty\n";
+    return 0; // return null on empty stack 
+  }
+  tos--;
+  return stck[tos];
+}
+
+int main()
+{
+  // Create two stacks that are automatically initialized.
+  stack s1, s2; 
+  int i;
+
+  s1.push('a');
+  s1.push('b');
+  s1.push('c');
+
+  // clone s1
+  s2 = s1;  // now s1 and s2 are identical
+
+  for(i=0; i<3; i++) cout << "Pop s1: " << s1.pop() << "\n";
+  for(i=0; i<3; i++) cout << "Pop s2: " << s2.pop() << "\n";
+
+  return 0;
+}
+
+listing 7
+// This program contains an error.
+
+#include <iostream>
+#include <cstring>
+#include <cstdlib>
+using namespace std;
+
+class strtype {
+  char *p;
+  int len;
+public:
+  strtype(char *ptr);
+  ~strtype();
+  void show();
+};
+
+strtype::strtype(char *ptr)
+{
+  len = strlen(ptr);
+  p = (char *) malloc(len+1);
+  if(!p) {
+    cout << "Allocation error\n";
+    exit(1);
+  }
+  strcpy(p, ptr);
+}
+
+strtype::~strtype()
+{
+  cout << "Freeing p\n";
+  free(p);
+}
+
+void strtype::show()
+{
+  cout << p << " - length: " << len;
+  cout << "\n";
+}
+
+int main()
+{
+  strtype s1("This is a test."), s2("I like C++.");
+
+  s1.show();
+  s2.show();
+
+  // assign s1 to s2 - - this generates an error
+  s2 = s1;
+
+  s1.show();
+  s2.show();
+
+  return 0;
+}
+
+listing 8
+// This program has an error.
+#include <iostream>
+using namespace std;
+
+class cl1 {
+  int i, j;
+public:
+  cl1(int a, int b) { i = a; j = b; }
+  // ...
+};
+
+class cl2 {
+  int i, j;
+public:
+  cl2(int a, int b) { i = a; j = b; }
+  // ...
+};
+
+int main()
+{
+  cl1 x(10, 20);
+  cl2 y(0, 0);
+  x = y;
+
+  // ...
+}
+
+listing 9
+#include <iostream>
+using namespace std;
+
+class samp {
+  int i;
+public:
+  samp(int n) { i = n; }
+  int get_i() { return i; }
+};
+
+// Return square of o.i.
+int sqr_it(samp o)
+{
+  return o.get_i() * o.get_i();
+}
+
+int main()
+{
+  samp a(10), b(2);
+
+  cout << sqr_it(a) << "\n";
+  cout << sqr_it(b) << "\n";
+
+  return 0;
+}
+
+listing 10
+/*
+   Remember, objects, like other parameters, are passed
+   by value. Thus changes to the parameter inside a
+   function have no effect on the object used in the call.
+*/
+#include <iostream>
+using namespace std;
+
+class samp {
+  int i;
+public:
+  samp(int n) { i = n; }
+  void set_i(int n) { i = n; }
+  int get_i() { return i; }
+};
+
+/* Set o.i to its square. This has no effect on the
+   object used to call sqr_it(), however.
+*/
+void sqr_it(samp o)
+{
+   o.set_i(o.get_i() * o.get_i());
+
+  cout << "Copy of a has i value of " << o.get_i();
+  cout << "\n";
+}
+
+int main()
+{
+  samp a(10);
+
+  sqr_it(a); // a passed by value
+
+  cout << "But, a.i is unchanged in main: ";
+  cout << a.get_i();  // displays 10
+
+  return 0;
+}
+
+listing 11
+/*
+   Now that the address of an object is passed to sqr_it(),
+   the function may modify the value of the argument whose
+   address is used in the call.
+*/
+#include <iostream>
+using namespace std;
+
+class samp {
+  int i;
+public:
+  samp(int n) { i = n; }
+  void set_i(int n) { i = n; }
+  int get_i() { return i; }
+};
+
+/* Set o.i to its square. This affects the calling
+   argument.
+*/
+void sqr_it(samp *o)
+{
+   o->set_i(o->get_i() * o->get_i());
+
+  cout << "Copy of a has i value of " << o->get_i();
+  cout << "\n";
+}
+
+int main()
+{
+  samp a(10);
+
+  sqr_it(&a); // pass a's address to sqr_it()
+
+  cout << "Now, a in main() has been changed: ";
+  cout << a.get_i();  // displays 100
+
+  return 0;
+}
+
+listing 12
+#include <iostream>
+using namespace std;
+
+class samp {
+  int i;
+public:
+  samp(int n) { 
+    i = n; 
+    cout << "Constructing\n";
+  }
+  ~samp() { cout << "Destructing\n"; }
+  int get_i() { return i; }
+};
+
+// Return square of o.i.
+int sqr_it(samp o)
+{
+  return o.get_i() * o.get_i();
+}
+
+int main()
+{
+  samp a(10);
+
+  cout << sqr_it(a) << "\n";
+ 
+  return 0;
+}
+
+listing 13
+// This program contains an error.
+#include <iostream>
+#include <cstdlib>
+using namespace std;
+
+class dyna {
+  int *p;
+public:
+  dyna(int i);
+  ~dyna() { free(p); cout << "freeing \n"; }
+  int get() { return *p; }
+};
+
+dyna::dyna(int i)
+{
+  p = (int *) malloc(sizeof(int));
+  if(!p) {
+    cout << "Allocation failure\n";
+    exit(1);
+  }
+
+  *p = i;
+}
+
+// Return negative value of *ob.p
+int neg(dyna ob)  
+{
+  return -ob.get();
+}
+
+int main()
+{
+  dyna o(-10);
+
+  cout << o.get() << "\n";
+  cout << neg(o) << "\n";
+
+  dyna o2(20);
+  cout << o2.get() << "\n";
+  cout << neg(o2) << "\n";
+
+  cout << o.get() << "\n";
+  cout << neg(o) << "\n";
+
+  return 0;
+}
+
+listing 14
+// Returning an object
+#include <iostream>
+#include <cstring>
+using namespace std;
+
+class samp {
+  char s[80];
+public:
+  void show() { cout << s << "\n"; }
+  void set(char *str) { strcpy(s, str); } 
+};
+
+// Return an object of type samp
+samp input()
+{
+  char s[80];
+  samp str;
+
+  cout << "Enter a string: ";
+  cin >> s;
+
+  str.set(s);
+
+  return str;
+}
+
+int main()
+{
+  samp ob;
+
+  // assign returned object to ob
+  ob = input();
+  ob.show();
+
+  return 0;
+}
+
+listing 15
+// An error generated by returning an object.
+#include <iostream>
+#include <cstring>
+#include <cstdlib>
+using namespace std;
+
+class samp {
+  char *s;
+public:
+  samp() { s = '\0'; }
+  ~samp() { if(s) free(s); cout << "Freeing s\n"; }
+  void show() { cout << s << "\n"; }
+  void set(char *str);
+};
+
+// Load a string.
+void samp::set(char *str)
+{
+  s = (char *) malloc(strlen(str)+1);
+  if(!s) {
+    cout << "Allocation error\n";
+    exit(1);
+  }
+
+  strcpy(s, str);
+}
+
+// Return an object of type samp.
+samp input()
+{
+  char s[80];
+  samp str;
+
+  cout << "Enter a string: ";
+  cin >> s;
+
+  str.set(s);
+  return str;
+}
+
+int main()
+{
+  samp ob;
+
+  // assign returned object to ob
+  ob = input();  // This causes an error!!!!
+  ob.show();
+
+  return 0;
+}
+
+listing 16
+// A example of a friend function.
+#include <iostream>
+using namespace std;
+
+class myclass {
+  int n, d;
+public:
+  myclass(int i, int j) { n = i; d = j; }
+  // declare a friend of myclass
+  friend int isfactor(myclass ob);
+};
+
+/* Here is friend function definition. It returns true
+   if d is a factor of n. Notice that the keyword
+   friend is not used in the definition of isfactor().
+*/
+int isfactor(myclass ob)
+{
+  if(!(ob.n % ob.d)) return 1;
+  else return 0;
+}
+
+int main()
+{
+  myclass ob1(10, 2), ob2(13, 3);
+
+  if(isfactor(ob1)) cout << "2 is a factor of 10\n";
+  else cout << "2 is not a factor of 10\n";
+
+  if(isfactor(ob2)) cout << "3 is a factor of 13\n";
+  else cout << "3 is not a factor of 13\n";
+
+  return 0;
+}
+
+listing 17
+ob1.isfactor(); // wrong, isfactor is not a member function
+
+listing 18
+#include <iostream>
+using namespace std;
+
+class truck; // a forward declaration
+
+class car {
+  int passengers;
+  int speed;
+public:
+  car(int p, int s) { passengers = p; speed = s; }
+  friend int sp_greater(car c, truck t);
+};
+
+class truck {
+  int weight;
+  int speed;
+public:
+  truck(int w, int s) { weight = w, speed = s; }
+  friend int sp_greater(car c, truck t);
+};
+
+/* Return positive if car speed faster than truck.
+   Return 0 if speeds are the same.
+   Return negative if truck speed faster than car.
+*/
+int sp_greater(car c, truck t)
+{
+  return c.speed - t.speed;
+}
+
+int main()
+{
+  int t;
+  car c1(6, 55), c2(2, 120);
+  truck t1(10000, 55), t2(20000, 72);
+
+  cout << "Comparing c1 and t1:\n";
+  t = sp_greater(c1, t1);  
+  if(t<0) cout << "Truck is faster.\n";
+  else if(t==0) cout << "Car and truck speed is the same.\n";
+  else cout << "Car is faster.\n";
+
+  cout << "\nComparing c2 and t2:\n";
+  t = sp_greater(c2, t2);
+  if(t<0) cout << "Truck is faster.\n";
+  else if(t==0) cout << "Car and truck speed is the same.\n";
+  else cout << "Car is faster.\n";
+
+  return 0;
+}
+
+listing 19
+class truck;
+
+listing 20
+#include <iostream>
+using namespace std;
+
+class truck; // a forward declaration
+
+class car {
+  int passengers;
+  int speed;
+public:
+  car(int p, int s) { passengers = p; speed = s; }
+  int sp_greater(truck t);
+};
+
+class truck {
+  int weight;
+  int speed;
+public:
+  truck(int w, int s) { weight = w, speed = s; }
+
+  // note new use of the scope resolution operator
+  friend int car::sp_greater(truck t);
+};
+
+/* Return positive if car speed faster than truck.
+   Return 0 if speeds are the same.
+   Return negative if truck speed faster than car.
+*/
+int car::sp_greater(truck t)
+{
+  /* Since sp_greater() is member of car, only a
+     truck object must be passed to it. */
+     
+  return speed-t.speed;
+}
+
+int main()
+{
+  int t;
+  car c1(6, 55), c2(2, 120);
+  truck t1(10000, 55), t2(20000, 72);
+
+  cout << "Comparing c1 and t1:\n";
+  t = c1.sp_greater(t1);  // evoke as member function of car
+  if(t<0) cout << "Truck is faster.\n";
+  else if(t==0) cout << "Car and truck speed is the same.\n";
+  else cout << "Car is faster.\n";
+
+  cout << "\nComparing c2 and t2:\n";
+  t = c2.sp_greater(t2); // evoke as member function of car
+  if(t<0) cout << "Truck is faster.\n";
+  else if(t==0) cout << "Car and truck speed is the same.\n";
+  else cout << "Car is faster.\n";
+
+  return 0;
+}
+
+listing 21
+t = c1.sp_greater(t1);
+
+listing 22
+t = c1.car::sp_greater(t1);
+
+listing 23
+class pr1 {
+  int printing;
+  // ...
+public:
+  pr1() { printing = 0; }
+  void set_print(int status) { printing = status; }
+  // ...
+};
+
+class pr2 {
+  int printing;
+  // ...
+public:
+  pr2() { printing = 0; }
+  void set_print(int status) { printing = status; }
+  // ...
+};
+
+listing 24
+class samp {
+  double *p;
+public:
+  samp(double d) { 
+    p = (double *) malloc(sizeof(double));
+    if(!p) exit(1);  // allocation error
+    *p = d;
+  }
+  ~samp() { free(p); }
+  // ...
+};
+
+// ...
+samp ob1(123.09), ob2(0.0);
+// ...
+ob2 = ob1;
+
+listing 25
+class planet {
+  int moons;
+  double dist_from_sun; // in miles
+  double diameter;
+  double mass;
+public:
+  //...
+  double get_miles() { return dist_from_sun; }    
+};
+
+listing 26
+class base {
+  int a;
+public:
+  void load_a(int n) { a = n; }
+  int get_a() { return a; }
+};
+
+class derived : public base {
+  int b;
+public:
+  void load_b(int n) { b = n; }
+  int get_b() { return b; }
+};
+
