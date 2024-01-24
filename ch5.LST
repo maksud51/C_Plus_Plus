@@ -1,0 +1,793 @@
+listing 1
+class samp {
+  int x;
+public:
+  samp(int n) { x = n; }
+  int getx() { return x; }
+};
+
+listing 2
+#include <iostream>
+using namespace std;
+
+class myclass {
+  int x;
+public:
+  // overload constructor two ways
+  myclass() { x = 0; } // no initializer
+  myclass(int n) { x = n; } // initializer
+  int getx() { return x; }
+};
+
+int main()
+{
+  myclass o1(10); // declare with initial value
+  myclass o2; // declare without initializer
+
+  cout << "o1: " << o1.getx() << '\n';
+  cout << "o2: " << o2.getx() << '\n';
+
+  return 0;
+}
+
+listing 3
+myclass ob(10);
+myclass ob[5];
+
+listing 4
+#include <iostream>
+using namespace std;
+
+class myclass {
+  int x;
+public:
+  // overload constructor two ways
+  myclass() { x = 0; } // no initializer
+  myclass(int n) { x = n; } // initializer
+  int getx() { return x; }
+};
+
+int main()
+{
+  myclass o1[10]; // declare array without initializers
+
+  // declare with initializers
+  myclass o2[10] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+
+  int i;
+
+  for(i=0; i<10; i++) {
+    cout << "o1[" << i << "]: " << o1[i].getx();
+    cout << '\n';
+    cout << "o2[" << i << "]: " << o2[i].getx();
+    cout << '\n';
+  }
+
+  return 0;
+}
+
+listing 5
+#include <iostream>
+#include <cstdio> // included for sscanf()
+using namespace std;
+
+class date {
+  int day, month, year;
+public:
+  date(char *str);
+  date (int m, int d, int y) {
+    day = d;
+    month = m;
+    year = y;
+  }
+  void show() {
+    cout << month << '/' << day << '/';
+    cout << year << '\n';
+  }
+};
+ 
+date::date(char *str)
+{
+  sscanf(str, "%d%*c%d%*c%d", &month, &day, &year);
+}
+
+int main()
+{
+  // construct date object using string
+  date sdate("12/31/99");
+
+  // construct date object using integers
+  date idate(12, 31, 99);
+
+  sdate.show();
+  idate.show();
+  return 0;
+}
+
+listing 6
+#include <iostream>
+using namespace std;
+
+class myclass {
+  int x;
+public:
+  // overload constructor two ways
+  myclass() { x = 0; } // no initializer
+  myclass(int n) { x = n; } // initializer
+  int getx() { return x; }
+  void setx(int n) { x = n; }
+};
+
+int main()
+{
+  myclass *p;
+  myclass ob(10);  // initialize single variable
+
+  p = new myclass[10]; // can't use initializers here
+  if(!p) {
+    cout << "Allocation error\n";
+    return 1;
+  }
+
+  int i;
+
+  // initialize all elements to ob
+  for(i=0; i<10; i++) p[i] = ob;
+
+  for(i=0; i<10; i++) {
+    cout << "p[" << i << "]: " << p[i].getx();
+    cout << '\n';
+  }
+
+  return 0;
+}
+
+listing 7
+class strtype {
+  char *p;
+  int len;
+public:
+  char *getstring() { return p; }
+  int getlength() { return len; }
+};
+
+listing 8
+myclass x = y; // y explicitly initializing x
+func1(y);      // y passed as a parameter
+y = func2();   // y receiving a returned object
+
+listing 9
+/* This program creates a "safe" array class. Since space
+   for the array is dynamically allocated, a copy constructor
+   is provided to allocate memory when one array object is
+   used to initialize another.
+*/
+#include <iostream>
+#include <cstdlib>
+using namespace std;
+
+class array {
+  int *p;
+  int size;
+public:
+  array(int sz) { // constructor
+    p = new int[sz];
+    if(!p) exit(1);
+    size = sz;
+    cout << "Using 'normal' constructor\n";
+  }
+  ~array() {delete [] p;}
+
+  // copy constructor
+  array(const array &a);
+
+  void put(int i, int j) {
+    if(i>=0 && i<size) p[i] = j;
+  }
+  int get(int i) {
+    return p[i];
+  }
+};
+
+/* Copy constructor.
+
+In the following, memory is allocated specifically
+for the copy, and the address of this memory is assigned
+to p. Therefore, p is not pointing to the same dynamically
+allocated memory as the original object. 
+*/
+array::array(const array &a) {
+  int i;
+
+  size = a.size;
+  p = new int[a.size];  // allocate memory for copy
+  if(!p) exit(1);
+  for(i=0; i<a.size; i++) p[i] = a.p[i]; // copy contents
+  cout << "Using copy constructor\n";
+}
+
+int main()
+{ 
+  array num(10);  // this calls "normal" constructor
+  int i;
+
+  // put some values into the array
+  for(i=0; i<10; i++) num.put(i, i);
+
+  // display num
+  for(i=9; i>=0; i--) cout << num.get(i);
+  cout << "\n";
+
+  // create another array and initialize with num
+  array x = num;  // this invokes copy constructor
+
+  // display x
+  for(i=0; i<10; i++) cout << x.get(i);
+
+  return 0;
+}
+
+listing 10
+array a(10);
+array b(10);
+
+b = a; // does not call copy constructor
+
+listing 11
+// This program has an error.
+#include <iostream>
+#include <cstring>
+#include <cstdlib>
+using namespace std;
+
+class strtype {
+  char *p;
+public:
+  strtype(char *s);
+  ~strtype() { delete [] p; }
+  char *get() { return p; }
+};
+
+strtype::strtype(char *s)
+{
+  int l;
+
+  l = strlen(s)+1;
+
+  p = new char [l];
+  if(!p) {
+    cout << "Allocation error\n";
+    exit(1);
+  }
+
+  strcpy(p, s);
+}
+
+void show(strtype x)
+{
+  char *s;
+   
+  s = x.get();
+  cout << s << "\n";
+}
+
+int main()
+{
+  strtype a("Hello"), b("There");
+
+  show(a);
+  show(b);
+
+  return 0;
+}
+
+listing 12
+/* This program uses a copy constructor to allow strtype objects
+   to be passed to functions. */
+#include <iostream>
+#include <cstring>
+#include <cstdlib>
+using namespace std;
+
+class strtype {
+  char *p;
+public:
+  strtype(char *s); // constructor
+  strtype(const strtype &o); // copy constructor
+  ~strtype() { delete [] p; } // destructor
+  char *get() { return p; }
+};
+
+// "Normal" constructor
+strtype::strtype(char *s)
+{
+  int l;
+
+  l = strlen(s)+1;
+
+  p = new char [l];
+  if(!p) {
+    cout << "Allocation error\n";
+    exit(1);
+  }
+
+  strcpy(p, s);
+}
+
+// Copy constructor
+strtype::strtype(const strtype &o)
+{
+  int l;
+
+  l = strlen(o.p)+1;
+
+  p = new char [l]; // allocate memory for new copy
+  if(!p) {
+    cout << "Allocation error\n";
+    exit(1);
+  }
+
+  strcpy(p, o.p); // copy string into copy
+}
+
+void show(strtype x)
+{
+  char *s;
+   
+  s = x.get();
+  cout << s << "\n";
+}
+
+int main()
+{
+  strtype a("Hello"), b("There");
+
+  show(a);
+  show(b);
+
+  return 0;
+}
+
+listing 13
+#include <iostream>
+using namespace std;
+
+class myclass {
+public:
+  myclass();
+  myclass(const myclass &o);
+  myclass f();
+};
+
+// Normal constructor
+myclass::myclass()
+{
+  cout << "Constructing normally\n";
+}
+
+// Copy constructor
+myclass::myclass(const myclass &o)
+{
+  cout << "Constructing copy\n";
+}
+
+// Return an object.
+myclass myclass::f()
+{
+  myclass temp;
+
+  return temp;
+}
+
+int main()
+{
+  myclass obj;
+
+  obj = obj.f();
+
+  return 0;
+}
+
+listing 14
+// This program contains an error.
+#include <iostream>
+#include <cstdlib>
+using namespace std;
+
+class myclass {
+  int *p;
+public:
+  myclass(int i);
+  ~myclass() { delete p; }
+  friend int getval(myclass o);
+};
+
+myclass::myclass(int i)
+{
+  p = new int;
+
+  if(!p) {
+    cout << "Allocation error\n";
+    exit(1);
+  }
+  *p = i;
+}
+
+int getval(myclass o)
+{ 
+  return *o.p; // get value
+}
+
+int main()
+{
+  myclass a(1), b(2);
+
+  cout << getval(a) << " " << getval(b);
+  cout << "\n";
+  cout << getval(a) << " " << getval(b);
+
+  return 0;
+}
+
+listing 15
+overload timer;
+
+listing 16
+void f(int a=0, int b=0);
+
+listing 17
+f(); // a and b default to 0
+f(10); // a is 10, b defaults to 0
+f(10, 99) // a is 10, b is 99
+
+listing 18
+// A simple first example of default arguments.
+#include <iostream>
+using namespace std;
+
+void f(int a=0, int b=0)
+{
+  cout << "a: " << a << ", b: " << b;
+  cout << '\n';
+}
+
+int main()
+{
+  f();
+  f(10);
+  f(10, 99);
+
+  return 0;
+}
+
+listing 19
+void f(int a=0, int b) // wrong! b must have default, too
+{
+  cout << "a: " << a << ", b: " << b;
+  cout << '\n';
+}
+
+listing 20
+// Compute area of a rectangle using overloaded functions.
+#include <iostream>
+using namespace std;
+
+// Return area of a non-square rectangle.
+double rect_area(double length, double width)
+{
+  return length * width;
+}
+
+// Return area of a square.
+double rect_area(double length)
+{
+  return length * length;
+}
+
+int main()
+{
+  cout  << "10 x 5.8 rectangle has area: ";
+  cout << rect_area(10.0, 5.8) << '\n';
+
+  cout  << "10 x 10 square has area: ";
+  cout << rect_area(10.0) << '\n';
+  return 0;
+}
+
+listing 21
+// Compute area of a rectangle using default arguments.
+#include <iostream>
+using namespace std;
+
+// Return area of a rectangle.
+double rect_area(double length, double width = 0)
+{
+  if(!width) width = length;
+  return length * width;
+}
+
+int main()
+{
+  cout  << "10 x 5.8 rectangle has area: ";
+  cout << rect_area(10.0, 5.8) << '\n';
+
+  cout  << "10 x 10 square has area: ";
+  cout << rect_area(10.0) << '\n';
+
+  return 0;
+}
+
+listing 22
+#include <iostream>
+using namespace std;
+
+class myclass {
+  int x;
+public:
+  /* Use default argument instead of overloading 
+     myclass's constructor. */
+  myclass(int n = 0) { x = n; }
+  int getx() { return x; }
+};
+
+int main()
+{
+  myclass o1(10); // declare with initial value
+  myclass o2; // declare without initializer
+
+  cout << "o1: " << o1.getx() << '\n';
+  cout << "o2: " << o2.getx() << '\n';
+
+  return 0;
+}
+
+listing 23
+#include <iostream>
+#include <cctype>
+using namespace std;
+
+const int ignore = 0;
+const int upper = 1;
+const int lower = 2;
+
+void print(char *s, int how = -1);
+
+int main()
+{
+  print("Hello There\n", ignore);
+  print("Hello There\n", upper);
+  print("Hello There\n"); // continue in upper
+  print("Hello there\n", lower);
+  print("That's all\n");  // continue in lower
+
+  return 0;
+}
+
+/* Print a string in the specified case. Use
+   last case specified if none is given.
+*/
+void print(char *s, int how)
+{
+  static int oldcase = ignore;
+
+  // reuse old case if none specified
+  if(how<0) how = oldcase; 
+  while(*s) {
+    switch(how) {
+      case upper: cout << (char) toupper(*s);
+        break;
+      case lower: cout << (char) tolower(*s);
+        break;
+      default: cout << *s;
+    }
+    s++;
+  }
+  oldcase = how;
+}
+
+listing 24
+myclass(const myclass &obj, int x=0) {
+  // body of constructor
+}
+
+listing 25
+// This program contains an ambiguity error.
+#include <iostream>
+using namespace std;
+
+float f(float i)
+{
+  return i / 2.0;
+}
+
+double f(double i)
+{
+  return i / 3.0;
+}
+
+int main()
+{
+  float x = 10.09;
+  double y = 10.09;
+
+  cout << f(x); // unambiguous - use f(float)
+  cout << f(y); // unambiguous - use f(double)
+
+  cout << f(10); // ambiguous, convert 10 to double or float??
+
+  return 0;
+}
+
+listing 26
+// This program is ambiguous.
+#include <iostream>
+using namespace std;
+
+void f(unsigned char c)
+{
+  cout << c;
+}
+ 
+void f(char c)
+{
+  cout << c;
+}
+
+int main()
+{
+  f('c');
+  f(86); // which f() is called???
+
+  return 0;
+}
+
+listing 27
+// An ambiguous program.
+#include <iostream>
+using namespace std;
+
+int f(int a, int b)
+{
+  return a+b;
+}
+
+// this is inherently ambiguous
+int f(int a, int &b)
+{
+  return a-b;
+}
+
+int main()
+{
+  int x=1, y=2;
+
+  cout << f(x, y); // which version of f() is called???
+
+  return 0;
+}
+
+listing 28
+// Ambiguity based on default arguments plus overloading.
+#include <iostream>
+using namespace std;
+
+int f(int a)
+{
+  return a*a;
+}
+
+int f(int a, int b = 0)
+{
+  return a*b;
+}
+
+int main()
+{
+  cout << f(10, 2); // calls f(int, int)
+  cout << f(10); // ambiguous - call f(int) or f(int, int)???
+
+  return 0;
+}
+
+listing 29
+p = zap;
+
+listing 30
+/* Illustrate assigning function pointers to 
+   overloaded functions. */
+#include <iostream>
+using namespace std;
+
+// Output count number of spaces.
+void space(int count) 
+{
+  for( ; count; count--) cout << ' ';
+}
+
+// Output count number of chs.
+void space(int count, char ch) 
+{
+  for( ; count; count--) cout << ch;
+}
+
+int main()
+{
+  /* Create a pointer to void function with 
+     one int parameter. */
+  void (*fp1)(int);
+
+  /* Create a pointer to void function with
+     one int parameter and one character parameter. */
+  void (*fp2)(int, char);
+
+  fp1 = space; // gets address of space(int)
+
+  fp2 = space; // gets address of space(int, char)
+
+  fp1(22);  // output 22 spaces
+  cout << "|\n";
+
+  fp2(30, 'x'); // output 30 xs
+  cout << "|\n";
+
+  return 0;
+}
+
+listing 31
+int dif(int a, int b)
+{
+  return a-b;
+}
+
+float dif(float a, float b)
+{
+  return a-b;
+}
+
+listing 32
+class samp {
+  int a;
+public:
+  samp(int i) { a = i; }
+  // ...
+}:
+
+// ...
+
+int main()
+{
+  samp x, y(10);
+ 
+  // ...
+}
+
+listing 33
+void compute(double *num, int divisor=1);
+void compute(double *num);
+// ...
+compute(&x);
+
+listing 34
+int x=1, y=0;
+order(x, y);
+
+listing 35
+int f(int a);
+int f(int &a);
+
+listing 36
+class samp {
+  int a;
+public:
+  // add constructor functions
+  int get_a() { return a; }
+};
+
+int main()
+{
+  samp ob(88); // init ob's a to 88
+  samp obarray[10]; // noninitialized 10-element array
+
+  // ...
+}
+
