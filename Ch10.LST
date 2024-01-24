@@ -1,0 +1,579 @@
+listing 1
+base *p; // base class pointer
+
+base base_ob; // object of type base
+derived derived_ob; // object of type derived
+
+// p can, of course, point to base objects
+p = &base_ob; // p points to base object
+
+// p can also point to derived objects without error
+p = &derived_ob; // p points to derived object
+
+listing 2
+// Demonstrate pointer to derived class.
+#include <iostream>
+using namespace std;
+
+class base {
+  int x;
+public:
+  void setx(int i) { x = i; }
+  int getx() { return x; }
+};
+
+class derived : public base {
+  int y;
+public:
+  void sety(int i) { y = i; }
+  int gety() { return y; }
+};
+
+int main()
+{
+  base *p; // pointer to base type
+  base b_ob; // object of base
+  derived d_ob; // object of derived
+
+  // use p to access base object
+  p = &b_ob;
+  p->setx(10); // access base object
+  cout << "Base object x: " << p->getx() << '\n';
+
+  // use p to access derived object
+  p = &d_ob; // point to derived object
+  p->setx(99); // access derived object
+
+  // can't use p to set y, so do it directly
+  d_ob.sety(88);
+  cout << "Derived object x: " << p->getx() << '\n';
+  cout << "Derived object y: " << d_ob.gety() << '\n';
+
+  return 0;
+}
+
+listing 3
+// A simple example using a virtual function.
+#include <iostream>
+using namespace std;
+
+class base {
+public:
+  int i;
+  base(int x) { i = x; }
+  virtual void func()
+  {
+    cout << "Using base version of func(): ";
+    cout << i << '\n';
+  }
+};
+
+class derived1 : public base {
+public:
+  derived1(int x) : base(x) {}
+  void func() 
+  {
+    cout << "Using derived1's version of func(): ";
+    cout << i*i << '\n';
+  }
+};
+
+class derived2 : public base {
+public:
+  derived2(int x) : base(x) {}
+  void func() 
+  {
+    cout << "Using derived2's version of func(): ";
+    cout << i+i << '\n';
+  }
+};
+
+int main()
+{
+  base *p;
+  base ob(10);  
+  derived1 d_ob1(10);   
+  derived2 d_ob2(10); 
+
+  p = &ob;
+  p->func(); // use base's func()
+
+  p = &d_ob1;
+  p->func(); // use derived1's func()
+
+  p = &d_ob2;
+  p->func(); // use derived2's func()
+
+  return 0;
+}
+
+listing 4
+// Virtual functions are hierarchical.
+#include <iostream>
+using namespace std;
+
+class base {
+public:
+  int i;
+  base(int x) { i = x; }
+  virtual void func()
+  {
+    cout << "Using base version of func(): ";
+    cout << i << '\n';
+  }
+};
+
+class derived1 : public base {
+public:
+  derived1(int x) : base(x) {}
+  void func() 
+  {
+    cout << "Using derived1's version of func(): ";
+    cout << i*i << '\n';
+  }
+};
+
+class derived2 : public base {
+public:
+  derived2(int x) : base(x) {}
+  // derived2 does not override func()
+};
+
+int main()
+{
+  base *p;
+  base ob(10);  
+  derived1 d_ob1(10);   
+  derived2 d_ob2(10); 
+  p = &ob;
+  p->func(); // use base's func()
+
+  p = &d_ob1;
+  p->func(); // use derived1's func()
+  p = &d_ob2;
+  p->func(); // use base's func()
+
+  return 0;
+}
+
+listing 5
+/* This example illustrates how a virtual function
+   can be used to respond to random events occurring
+   at run time.
+*/
+#include <iostream>
+#include <cstdlib>
+using namespace std;
+
+class base {
+public:
+  int i;
+  base(int x) { i = x; }
+  virtual void func()
+  {
+    cout << "Using base version of func(): ";
+    cout << i << '\n';
+  }
+};
+
+class derived1 : public base {
+public:
+  derived1(int x) : base(x) {}
+  void func() 
+  {
+    cout << "Using derived1's version of func(): ";
+    cout << i*i << '\n';
+  }
+};
+
+class derived2 : public base {
+public:
+  derived2(int x) : base(x) {}
+  void func() 
+  {
+    cout << "Using derived2's version of func(): ";
+    cout << i+i << '\n';
+  }
+};
+
+int main()
+{
+  base *p;
+  derived1 d_ob1(10);   
+  derived2 d_ob2(10); 
+  int i, j;
+
+  for(i=0; i<10; i++) {
+    j = rand();
+    if((j%2)) p = &d_ob1; // if odd use d_ob1
+    else p = &d_ob2; // if even use d_ob2
+    p->func(); // call appropriate function
+  }
+
+  return 0;
+}
+
+listing 6
+// Use virtual function to define interface.
+#include <iostream>
+using namespace std;
+
+class area {
+  double dim1, dim2; // dimensions of figure
+public:
+  void setarea(double d1, double d2)
+  {
+    dim1 = d1;
+    dim2 = d2;
+  }
+  void getdim(double &d1, double &d2)
+  {
+    d1 = dim1;
+    d2 = dim2;
+  }
+  virtual double getarea()
+  { 
+    cout << "You must override this function\n";
+    return 0.0;
+  }
+};
+
+class rectangle : public area {
+public:
+  double getarea() 
+  {
+    double d1, d2;
+    getdim(d1, d2);
+    return d1 * d2;
+  }
+};
+
+class triangle : public area {
+public:
+  double getarea()
+  {
+    double d1, d2;
+  
+    getdim(d1, d2);
+    return 0.5 * d1 * d2;
+  }
+};
+
+int main()
+{
+  area *p;
+  rectangle r;
+  triangle t;
+
+  r.setarea(3.3, 4.5);
+  t.setarea(4.0, 5.0);
+
+  p = &r;
+  cout << "Rectangle has area: " << p->getarea() << '\n';
+
+  p = &t;
+  cout << "Triangle has area: " << p->getarea() << '\n';
+
+  return 0;
+}
+
+listing 7
+// Create an abstract class.
+#include <iostream>
+using namespace std;
+
+class area {
+  double dim1, dim2; // dimensions of figure
+public:
+  void setarea(double d1, double d2)
+  {
+    dim1 = d1;
+    dim2 = d2;
+  }
+  void getdim(double &d1, double &d2)
+  {
+    d1 = dim1;
+    d2 = dim2;
+  }
+  virtual double getarea() = 0; // pure virtual function
+};
+
+class rectangle : public area {
+public:
+  double getarea() 
+  {
+    double d1, d2;
+  
+    getdim(d1, d2);
+    return d1 * d2;
+  }
+};
+
+class triangle : public area {
+public:
+  double getarea()
+  {
+    double d1, d2;
+  
+    getdim(d1, d2);
+    return 0.5 * d1 * d2;
+  }
+};
+
+int main()
+{
+  area *p;
+  rectangle r;
+  triangle t;
+
+  r.setarea(3.3, 4.5);
+  t.setarea(4.0, 5.0);
+
+  p = &r;
+  cout << "Rectangle has area: " << p->getarea() << '\n';
+
+  p = &t;
+  cout << "Triangle has area: " << p->getarea() << '\n';
+
+  return 0;
+}
+
+listing 8
+// Virtual functions retain their virtual nature when inherited.
+#include <iostream>
+using namespace std;
+
+class base {
+public:
+  virtual void func()
+  {
+    cout << "Using base version of func()\n";
+  }
+};
+
+class derived1 : public base {
+public:
+  void func() 
+  {
+    cout << "Using derived1's version of func()\n";
+  }
+};
+
+// Derived2 inherits derived1.
+class derived2 : public derived1 {
+public:
+  void func() 
+  {
+    cout << "Using derived2's version of func()\n";
+  }
+};
+
+int main()
+{
+  base *p;
+  base ob;
+  derived1 d_ob1;
+  derived2 d_ob2;
+
+  p = &ob;
+  p->func(); // use base's func()
+
+  p = &d_ob1;
+  p->func(); // use derived1's func()
+
+  p = &d_ob2;
+  p->func(); // use derived2's func()
+
+  return 0;
+}
+
+listing 9
+// Demonstrate virtual functons.
+#include <iostream>
+#include <cstdlib>
+#include <cctype>
+using namespace std;
+
+class list {
+public:
+  list *head; // pointer to start of list
+  list *tail; // pointer to end of list 
+  list *next; // pointer to next item
+  int num; // value to be stored
+
+  list() { head = tail = next = NULL; }
+  virtual void store(int i) = 0;
+  virtual int retrieve() = 0;
+};
+
+// Create a queue type list.
+class queue : public list {
+public:
+  void store(int i);
+  int retrieve();
+};
+
+void queue::store(int i)
+{
+  list *item;
+
+  item = new queue;
+  if(!item) {
+    cout << "Allocation error.\n";
+    exit(1);
+  }
+  item->num = i;
+
+  // put on end of list
+  if(tail) tail->next = item;
+  tail = item;
+  item->next = NULL;
+  if(!head) head = tail;
+}
+
+int queue::retrieve()
+{
+  int i;
+  list *p;
+
+  if(!head) {
+    cout << "List empty.\n";
+    return 0;
+  }
+
+  // remove from start of list
+  i = head->num;
+  p = head;
+  head = head->next;
+  delete p;
+
+  return i;
+}
+
+// Create a stack type list.
+class stack : public list {
+public:
+  void store(int i);
+  int retrieve();
+};
+
+void stack::store(int i)
+{
+  list *item;
+
+  item = new stack;
+  if(!item) {
+    cout << "Allocation error.\n";
+    exit(1);
+  }
+  item->num = i;
+
+  // put on front of list for stack-like operation
+  if(head) item->next = head;
+  head = item;
+  if(!tail) tail = head;
+}
+
+int stack::retrieve()
+{
+  int i;
+  list *p;
+
+  if(!head) {
+    cout << "List empty.\n";
+    return 0;
+  }
+
+  // remove from start of list
+  i = head->num;
+  p = head;
+  head = head->next;
+  delete p;
+
+  return i;
+}
+
+int main()
+{
+  list *p;
+
+  // demonstrate queue
+  queue q_ob;
+  p = &q_ob; // point to queue
+
+  p->store(1);
+  p->store(2);
+  p->store(3);
+
+  cout << "Queue: ";
+  cout << p->retrieve();
+  cout << p->retrieve();
+  cout << p->retrieve();
+
+  cout << '\n';
+
+  // demonstrate stack
+  stack s_ob;
+  p = &s_ob; // point to stack
+
+  p->store(1);
+  p->store(2);
+  p->store(3);
+
+  cout << "Stack: ";
+  cout << p->retrieve();
+  cout << p->retrieve();
+  cout << p->retrieve();
+
+  cout << '\n';
+
+  return 0;
+}
+
+listing 10
+int main()
+{
+  list *p;
+  stack s_ob;
+  queue q_ob;
+  char ch;
+  int i;
+
+  for(i=0; i<10; i++) {
+    cout << "Stack or Queue? (S/Q): ";
+    cin >> ch;
+    ch = tolower(ch);
+    if(ch=='q') p = &q_ob;
+    else p = &s_ob;
+    p->store(i);
+  }
+
+  cout << "Enter T to terminate\n";
+  for(;;) {
+    cout << "Remove from Stack or Queue? (S/Q): ";
+    cin >> ch;
+    ch = tolower(ch);
+    if(ch=='t') break;
+    if(ch=='q') p = &q_ob;
+    else p = &s_ob;
+    cout << p->retrieve() << '\n';
+  }
+
+  cout << '\n';
+
+  return 0;
+}
+
+listing 11
+class base {
+public:
+  virtual int f(int a) = 0;
+  // ...
+};
+
+class derived : public base {
+public:
+  int f(int a, int b) { return a*b; }
+  // ...
+};
+
