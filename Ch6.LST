@@ -1,0 +1,721 @@
+listing 1
+class myclass {
+  int x, y;
+public:
+  myclass(int i, int j) { x=i; y=j; }
+  // ...
+};
+
+listing 2
+int f(int a=0, double balance);
+
+listing 3
+void f(int a);
+void f(int &a);
+
+listing 4
+class test {
+  char *p;
+  int *q;
+  int count;
+public:
+  test(char *x, int *y, int c) {
+    p = x;
+    q = y;
+    count = c;
+  }
+  // ...
+};
+
+listing 5
+// Overload the + relative to coord class.
+#include <iostream>
+using namespace std;
+
+class coord {
+  int x, y; // coordinate values
+public:
+  coord() { x=0; y=0; }
+  coord(int i, int j) { x=i; y=j; }
+  void get_xy(int &i, int &j) { i=x; j=y; }
+  coord operator+(coord ob2);
+};
+
+// Overload + relative to coord class.
+coord coord::operator+(coord ob2)
+{
+  coord temp;
+  temp.x = x + ob2.x;
+  temp.y = y + ob2.y;
+
+  return temp;
+}
+
+int main()
+{
+  coord o1(10, 10), o2(5, 3), o3;
+  int x, y;
+
+  o3 = o1 + o2; // add two objects - this calls operator+()
+
+  o3.get_xy(x, y);
+  cout << "(o1+o2) X: " << x << ", Y: " << y << "\n";
+
+  return 0;
+}
+
+listing 6
+o3 = o1 + o2;
+
+listing 7
+o3 = o1 + o2 + o1 + o3;
+
+listing 8
+(o1+o2).get_xy(x, y);
+
+listing 9
+// Overload the +, -, and = relative to coord class.
+#include <iostream>
+using namespace std;
+
+class coord {
+  int x, y; // coordinate values
+public:
+  coord() { x=0; y=0; }
+  coord(int i, int j) { x=i; y=j; }
+  void get_xy(int &i, int &j) { i=x; j=y; }
+  coord operator+(coord ob2);
+  coord operator-(coord ob2);
+  coord operator=(coord ob2);
+};
+
+// Overload + relative to coord class.
+coord coord::operator+(coord ob2)
+{
+  coord temp;
+
+  temp.x = x + ob2.x;
+  temp.y = y + ob2.y;
+
+  return temp;
+}
+
+// Overload - relative to coord class.
+coord coord::operator-(coord ob2)
+{
+  coord temp;
+
+  temp.x = x - ob2.x;
+  temp.y = y - ob2.y;
+
+  return temp;
+}
+
+// Overload = relative to coord.
+coord coord::operator=(coord ob2)
+{
+  x = ob2.x;
+  y = ob2.y;
+
+  return *this; // return the object that is assigned
+}
+
+int main()
+{
+  coord o1(10, 10), o2(5, 3), o3;
+  int x, y;
+
+  o3 = o1 + o2; // add two objects - this calls operator+()
+  o3.get_xy(x, y);
+  cout << "(o1+o2) X: " << x << ", Y: " << y << "\n";
+
+  o3 = o1 - o2; // subtract two objects
+  o3.get_xy(x, y);
+  cout << "(o1-o2) X: " << x << ", Y: " << y << "\n";
+
+  o3 = o1; // assign an object
+  o3.get_xy(x, y);
+  cout << "(o3=o1) X: " << x << ", Y: " << y << "\n";
+
+  return 0;
+}
+
+listing 10
+a = b = c = d = 0;
+
+listing 11
+o3 = o2 = o1;
+
+listing 12
+// Overload + for ob + int as well as ob + ob.
+#include <iostream>
+using namespace std;
+
+class coord {
+  int x, y; // coordinate values
+public:
+  coord() { x=0; y=0; }
+  coord(int i, int j) { x=i; y=j; }
+  void get_xy(int &i, int &j) { i=x; j=y; }
+  coord operator+(coord ob2); // ob + ob
+  coord operator+(int i); // ob + int
+};
+
+// Overload + relative to coord class.
+coord coord::operator+(coord ob2)
+{
+  coord temp;
+
+  temp.x = x + ob2.x;
+  temp.y = y + ob2.y;
+
+  return temp;
+}
+
+// Overload + for ob + int
+coord coord::operator+(int i)
+{
+  coord temp;
+
+  temp.x = x + i;
+  temp.y = y + i;
+  return temp;
+}
+
+int main()
+{
+  coord o1(10, 10), o2(5, 3), o3;
+  int x, y;
+
+  o3 = o1 + o2; // add two objects - this calls operator+(coord)
+  o3.get_xy(x, y);
+  cout << "(o1+o2) X: " << x << ", Y: " << y << "\n";
+
+  o3 = o1 + 100; // add object + int - this call  operator+(int)
+  o3.get_xy(x, y);
+  cout << "(o1+100) X: " << x << ", Y: " << y << "\n";
+
+  return 0;
+}
+
+listing 13
+o3 = 19 + o1;  // int + ob
+
+listing 14
+// Overload + relative to coord class using references.
+coord coord::operator+(coord &ob2)
+{
+  coord temp;
+
+  temp.x = x + ob2.x;
+  temp.y = y + ob2.y;
+
+  return temp;
+}
+
+listing 15
+coord coord::operator%(coord ob)
+{
+  double i;
+
+  cout << "Enter a number: ";
+  cin >> i;
+  cout << "root of " << i << " is ";
+  cout << sqr(i);
+}
+
+listing 16
+// Overload the == and && relative to coord class.
+#include <iostream>
+using namespace std;
+
+class coord {
+  int x, y; // coordinate values
+public:
+  coord() { x=0; y=0; }
+  coord(int i, int j) { x=i; y=j; }
+  void get_xy(int &i, int &j) { i=x; j=y; }
+  int operator==(coord ob2);
+  int operator&&(coord ob2);
+};
+
+// Overload the == operator for coord.
+int coord::operator==(coord ob2)
+{
+  return x==ob2.x && y==ob2.y; 
+}
+
+// Overload the && operator for coord.
+int coord::operator&&(coord ob2)
+{
+  return (x && ob2.x) && (y && ob2.y);
+}
+ 
+int main()
+{
+  coord o1(10, 10), o2(5, 3), o3(10, 10), o4(0, 0);
+
+  if(o1==o2) cout << "o1 same as o2\n";
+  else cout << "o1 and o2 differ\n";
+
+  if(o1==o3) cout << "o1 same as o3\n";
+  else cout << "o1 and o3 differ\n";
+
+  if(o1&&o2) cout << "o1 && o2 is true\n";
+  else cout << "o1 && o2 is false\n";
+
+  if(o1&&o4) cout << "o1 && o4 is true\n";
+  else cout << "o1 && o4 is false\n";
+
+  return 0;
+}
+
+listing 17
+// Overload ++ relative to coord class.
+#include <iostream>
+using namespace std;
+
+class coord {
+  int x, y; // coordinate values
+
+public:
+  coord() { x=0; y=0; }
+  coord(int i, int j) { x=i; y=j; }
+  void get_xy(int &i, int &j) { i=x; j=y; }
+  coord operator++();
+};
+
+// Overload ++ for coord class.
+coord coord::operator++()
+{
+  x++;
+  y++;
+
+  return *this;
+}
+
+int main()
+{
+  coord o1(10, 10);
+  int x, y;
+
+  ++o1; // increment an object
+  o1.get_xy(x, y);
+  cout << "(++o1) X: " << x << ", Y: " << y << "\n";
+
+  return 0;
+}
+
+listing 18
+o2 = ++o1;
+
+listing 19
+o1++;
+++o1;
+
+listing 20
+coord coord::operator++(int notused);
+
+listing 21
+// Overload the - relative to coord class.
+#include <iostream>
+using namespace std;
+
+class coord {
+  int x, y; // coordinate values
+public:
+  coord() { x=0; y=0; }
+  coord(int i, int j) { x=i; y=j; }
+  void get_xy(int &i, int &j) { i=x; j=y; }
+  coord operator-(coord ob2); // binary minus
+  coord operator-(); // unary minus
+};
+
+// Overload - relative to coord class.
+coord coord::operator-(coord ob2)
+{
+  coord temp;
+
+  temp.x = x - ob2.x;
+  temp.y = y - ob2.y;
+
+  return temp;
+}
+
+// Overload unary - for coord class.
+coord coord::operator-()
+{
+  x = -x;
+  y = -y;
+  return *this;
+}
+
+int main()
+{
+  coord o1(10, 10), o2(5, 7);
+  int x, y;
+
+  o1 = o1 - o2; // subtraction
+  o1.get_xy(x, y);
+  cout << "(o1-o2) X: " << x << ", Y: " << y << "\n";
+
+  o1 = -o1; // negation
+  o1.get_xy(x, y);
+  cout << "(-o1) X: " << x << ", Y: " << y << "\n";
+
+  return 0;
+}
+
+listing 22
+// Overload the + relative to coord class using a friend.
+#include <iostream>
+using namespace std;
+
+class coord {
+  int x, y; // coordinate values
+public:
+  coord() { x=0; y=0; }
+  coord(int i, int j) { x=i; y=j; }
+  void get_xy(int &i, int &j) { i=x; j=y; }
+  friend coord operator+(coord ob1, coord ob2);
+};
+
+// Overload + using a friend.
+coord operator+(coord ob1, coord ob2)
+{
+  coord temp;
+
+  temp.x = ob1.x + ob2.x;
+  temp.y = ob1.y + ob2.y;
+
+  return temp;
+}
+
+int main()
+{
+  coord o1(10, 10), o2(5, 3), o3;
+  int x, y;
+
+  o3 = o1 + o2; // add two objects - this calls operator+()
+  o3.get_xy(x, y);
+  cout << "(o1+o2) X: " << x << ", Y: " << y << "\n";
+
+  return 0;
+}
+
+listing 23
+// Use friend operator functions to add flexibility.
+#include <iostream>
+using namespace std;
+
+class coord {
+  int x, y; // coordinate values
+
+public:
+  coord() { x=0; y=0; }
+  coord(int i, int j) { x=i; y=j; }
+  void get_xy(int &i, int &j) { i=x; j=y; }
+  friend coord operator+(coord ob1, int i);
+  friend coord operator+(int i, coord ob1);
+};
+
+// Overload for ob + int.
+coord operator+(coord ob1, int i)
+{
+  coord temp;
+
+  temp.x = ob1.x + i;
+  temp.y = ob1.y + i;
+
+  return temp;
+}
+
+// Overload for int + ob.
+coord operator+(int i, coord ob1)
+{
+  coord temp;
+
+  temp.x = ob1.x + i;
+  temp.y = ob1.y + i;
+
+  return temp;
+}
+
+int main()
+{
+  coord o1(10, 10);
+  int x, y;
+
+
+  o1 = o1 + 10; // object + integer
+  o1.get_xy(x, y);
+  cout << "(o1+10) X: " << x << ", Y: " << y << "\n";
+
+  o1 = 99 + o1; // integer + object
+  o1.get_xy(x, y);
+  cout << "(99+o1) X: " << x << ", Y: " << y << "\n";
+
+  return 0;
+}
+
+listing 24
+o1 = o1 + 10;
+o1 = 99 + o1;
+
+listing 25
+// Overload the ++ using a friend.
+#include <iostream>
+using namespace std;
+
+class coord {
+  int x, y; // coordinate values
+public:
+  coord() { x=0; y=0; }
+  coord(int i, int j) { x=i; y=j; }
+  void get_xy(int &i, int &j) { i=x; j=y; }
+  friend coord operator++(coord &ob);
+};
+
+// Overload ++ using a friend.
+coord operator++(coord &ob) // use reference parameter
+{
+  ob.x++;
+  ob.y++;
+
+  return ob; // return object generating the call
+}
+
+int main()
+{
+  coord o1(10, 10);
+  int x, y;
+
+  ++o1;  // o1 is passed by reference
+  o1.get_xy(x, y);
+  cout << "(++o1) X: " << x << ", Y: " << y << "\n";
+
+  return 0;
+}
+
+listing 26
+coord operator++(coord &ob); // prefix
+coord operator++(coord &ob, int notused); // postfix
+
+listing 27
+#include <iostream>
+#include <cstring>
+#include <cstdlib>
+using namespace std;
+
+class strtype {
+  char *p;
+  int len;
+public:
+  strtype(char *s);
+  ~strtype() { 
+     cout << "Freeing " << (unsigned) p << '\n';
+     delete [] p;
+   }
+  char *get() { return p; }
+  strtype &operator=(strtype &ob);
+};
+
+strtype::strtype(char *s)
+{
+  int l;
+
+  l = strlen(s)+1;
+
+  p = new char [l];
+  if(!p) {
+    cout << "Allocation error\n";
+    exit(1);
+  }
+
+  len = l;
+  strcpy(p, s);
+}
+
+// Assign an object.
+strtype &strtype::operator=(strtype &ob)
+{
+  // see if more memory is needed
+  if(len < ob.len) { // need to allocate more memory
+    delete [] p;
+    p = new char [ob.len];
+    if(!p) {
+      cout << "Allocation error\n";
+      exit(1);
+    }
+  }
+  len = ob.len;
+  strcpy(p, ob.p);
+  return *this;
+}  
+
+int main()
+{
+  strtype a("Hello"), b("There");
+
+  cout << a.get() << '\n';
+  cout << b.get() << '\n';
+
+  a = b; // now p is not overwritten
+
+  cout << a.get() << '\n';
+  cout << b.get() << '\n';
+
+  return 0;
+}
+
+listing 28
+class dynarray {
+  int *p;
+  int size;
+public:
+  dynarray(int s); // pass size of array in s
+  int &put(int i); // return reference to element i
+  int get(int i);  // return value of element i
+  // create operator=() function
+};
+
+listing 29
+O[9]
+
+listing 30
+O.operator[](9)
+
+listing 31
+#include <iostream>
+using namespace std;
+
+const int SIZE = 5;
+
+class arraytype {
+  int a[SIZE];
+public:
+  arraytype() {
+    int i;
+    for(i=0; i<SIZE; i++) a[i] = i;
+  }
+  int operator[](int i) { return a[i]; }
+};
+
+int main()
+{
+  arraytype ob;
+  int i;
+
+  for(i=0; i<SIZE; i++)
+    cout << ob[i] << " ";
+
+  return 0;
+}
+
+listing 32
+#include <iostream>
+using namespace std;
+
+const int SIZE = 5;
+
+class arraytype {
+  int a[SIZE];
+public:
+  arraytype() {
+    int i;
+    for(i=0; i<SIZE; i++) a[i] = i;
+  }
+  int &operator[](int i) { return a[i]; }
+};
+
+int main()
+{
+  arraytype ob;
+  int i;
+
+  for(i=0; i<SIZE; i++)
+    cout << ob[i] << " "; 
+
+  cout << "\n";
+
+  // add 10 to each element in the array
+  for(i=0; i<SIZE; i++) 
+    ob[i] = ob[i]+10;  // [] on left of =
+
+  for(i=0; i<SIZE; i++) 
+    cout << ob[i] << " ";
+
+  return 0;
+}
+
+listing 33
+// A safe array example.
+#include <iostream>
+#include <cstdlib>
+using namespace std;
+
+const int SIZE = 5;
+
+class arraytype {
+  int a[SIZE];
+public:
+  arraytype() {
+    int i;
+    for(i=0; i<SIZE; i++) a[i] = i;
+  }
+  int &operator[](int i);
+};
+
+// Provide range checking for arraytype.
+int &arraytype::operator[](int i)
+{
+  if(i<0 || i> SIZE-1) {
+    cout << "\nIndex value of ";
+    cout << i << " is out-of-bounds.\n";
+    exit(1);
+  }
+  return a[i];
+}
+
+int main()
+{
+  arraytype ob;
+  int i;
+
+  // this is OK
+  for(i=0; i<SIZE; i++) 
+    cout << ob[i] << " ";
+
+  /* this generates a run-time error because
+     SIZE+100 is out-of-range */
+  ob[SIZE+100] = 99; // error!
+
+  return 0;
+}
+
+listing 34
+ob[SIZE+100] = 99;
+
+listing 35
+ob << integer
+ob >> integer
+
+listing 36
+class three_d {
+  int x, y, z;
+public:
+  three_d(int i, int j, int k) 
+  {
+     x = i; y = j; z = k;
+  }
+  three_d() { x=0; y=0; z=0; }
+  void get(int &i, int &j, int &k)
+  {
+     i = x; j = y; k = z;
+  }
+};
+
+listing 37
+ob + double;
+double + ob;
+
