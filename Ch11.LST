@@ -1,0 +1,684 @@
+listing 1
+// Function template example.
+#include <iostream>
+using namespace std;
+
+// This is a function template.
+template <class X> void swapargs(X &a, X &b)
+{
+  X temp;
+
+  temp = a;
+  a = b;
+  b = temp;
+}
+
+int main()
+{
+  int i=10, j=20;
+  float x=10.1, y=23.3;
+
+  cout << "Original i, j: " << i << ' ' << j << endl;
+  cout << "Original x, y: " << x << ' ' << y << endl;
+
+  swapargs(i, j); // swap integers
+  swapargs(x, y); // swap floats
+
+  cout << "Swapped i, j: " << i << ' ' << j << endl;
+  cout << "Swapped x, y: " << x << ' ' << y << endl;
+
+  return 0;
+}
+
+listing 2
+template <class X> void swapargs(X &a, X &b)
+
+listing 3
+template <class X> 
+void swapargs(X &a, X &b)
+{
+  X temp;
+
+  temp = a;
+  a = b;
+  b = temp;
+}
+
+listing 4
+// This will not compile.
+template <class X>
+int i; // this is an error
+void swapargs(X &a, X &b)
+{
+  X temp;
+
+  temp = a;
+  a = b;
+  b = temp;
+}
+
+listing 5
+// Use typename.
+template <typename X> void swapargs(X &a, X &b)
+{
+  X temp;
+
+  temp = a;
+  a = b;
+  b = temp;
+}
+
+listing 6
+#include <iostream>
+using namespace std;
+
+template <class type1, class type2>
+void myfunc(type1 x, type2 y)
+{
+  cout << x << ' ' << y << endl;
+}
+
+int main()
+{
+  myfunc(10, "hi");
+
+  myfunc(0.23, 10L);
+
+  return 0;
+}
+
+listing 7
+void outdata(int i)
+{
+  cout << i;
+}
+
+void outdata(double d)
+{
+  cout << setprecision(10) << setfill('#');
+  cout << d;
+  cout << setprecision(6) << setfill(' ');
+}
+
+listing 8
+// Overriding a template function.
+#include <iostream>
+using namespace std;
+
+template <class X> void swapargs(X &a, X &b)
+{
+  X temp;
+
+  temp = a;
+  a = b;
+  b = temp;
+}
+
+// This overrides the generic version of swapargs().
+void swapargs(int a, int b)
+{
+  cout << "this is inside swapargs(int,int)\n";
+}
+
+int main()
+{
+  int i=10, j=20;
+  float x=10.1, y=23.3;
+  
+
+  cout << "Original i, j: " << i << ' ' << j << endl;
+  cout << "Original x, y: " << x << ' ' << y << endl;
+
+  swapargs(i, j); // this calls the explicitly overloaded swapargs()
+  swapargs(x, y); // swap floats
+
+  cout << "Swapped i, j: " << i << ' ' << j << endl;
+  cout << "Swapped x, y: " << x << ' ' << y << endl;
+
+  return 0;
+}
+
+listing 9
+int find(int object, int *list, int size)
+{
+  // ...
+}
+
+listing 10
+// A simple generic linked list.
+#include <iostream>
+using namespace std;
+
+template <class data_t> class list {
+  data_t data;
+  list *next;
+public:
+  list(data_t d);
+  void add(list *node) {node->next = this; next = 0; }
+  list *getnext() { return next; }
+  data_t getdata() { return data; }
+};
+
+template <class data_t> list<data_t>::list(data_t d)
+{
+  data = d;
+  next = 0;
+}
+
+int main()
+{
+  list<char> start('a'); 
+  list<char> *p, *last;
+  int i;
+  
+  // build a list
+  last = &start;
+  for(i=1; i<26; i++) {
+    p = new list<char> ('a' + i);
+    p->add(last);
+    last = p;
+  }
+
+  // follow the list
+  p = &start;
+  while(p) {
+    cout << p->getdata();
+    p = p->getnext();
+  }
+
+  return 0;
+}
+
+listing 11
+list<char> start('a');
+
+listing 12
+list<int> int_start(1);
+
+listing 13
+struct addr {
+  char name[40];
+  char street[40];
+  char city[30];
+  char state[3];
+  char zip[12];
+}
+
+listing 14
+list<addr> obj(structvar);
+
+listing 15
+// This function demonstrates a generic stack.
+#include <iostream>
+using namespace std;
+
+#define SIZE 10
+
+// Create a generic stack class
+template <class StackType> class stack { 
+  StackType stck[SIZE]; // holds the stack
+  int tos; // index of top-of-stack
+
+public:
+  void init() { tos = 0; } // initialize stack
+  void push(StackType ch); // push object on stack
+  StackType pop(); // pop object from stack
+};
+
+// Push an object.
+template <class StackType> void stack<StackType>::push(StackType ob) 
+{ 
+  if(tos==SIZE) {
+    cout << "Stack is full.\n";
+    return;
+  }
+  stck[tos] = ob;
+  tos++;
+}
+// Pop an object.
+template <class StackType> StackType stack<StackType>::pop()
+{
+  if(tos==0) {
+    cout << "Stack is empty.\n";
+    return 0; // return null on empty stack 
+  }
+  tos--;
+  return stck[tos];
+}
+
+int main()
+{
+  // Demonstrate character stacks.
+  stack<char> s1, s2;  // create two stacks
+  int i;
+ 
+  // initialize the stacks
+  s1.init();
+  s2.init();
+
+  s1.push('a');
+  s2.push('x');
+  s1.push('b');
+  s2.push('y');
+  s1.push('c');
+  s2.push('z');
+
+  for(i=0; i<3; i++) cout << "Pop s1: " << s1.pop() << "\n";
+  for(i=0; i<3; i++) cout << "Pop s2: " << s2.pop() << "\n";
+
+  // demonstrate double stacks
+  stack<double> ds1, ds2;  // create two stacks
+
+  // initialize the stacks
+  ds1.init();
+  ds2.init();
+
+  ds1.push(1.1);
+  ds2.push(2.2);
+  ds1.push(3.3);
+  ds2.push(4.4);
+  ds1.push(5.5);
+  ds2.push(6.6);
+
+  for(i=0; i<3; i++) cout << "Pop ds1: " << ds1.pop() << "\n";
+  for(i=0; i<3; i++) cout << "Pop ds2: " << ds2.pop() << "\n";
+
+  return 0;
+}
+
+listing 16
+/* This example uses two generic data types in a
+   class definition.
+*/
+#include <iostream>
+using namespace std;
+
+template <class Type1, class Type2> class myclass
+{
+  Type1 i;
+  Type2 j;
+public:
+  myclass(Type1 a, Type2 b) { i = a; j = b; }
+  void show() { cout << i << ' ' << j << '\n'; }
+};
+
+int main()
+{
+  myclass<int, double> ob1(10, 0.23);
+  myclass<char, char *> ob2('X', "This is a test");
+
+  ob1.show(); // show int, double
+  ob2.show(); // show char, char *
+ 
+  return 0;
+}
+
+listing 17
+// A simple exception handling example.
+#include <iostream>
+using namespace std;
+
+int main()
+{
+  cout << "start\n";
+
+  try { // start a try block
+    cout << "Inside try block\n";
+    throw 10; // throw an error
+    cout << "This will not execute";
+  }
+  catch (int i) { // catch an error
+    cout << "Caught One! Number is: ";
+    cout << i << "\n";
+  }
+
+  cout << "end";
+
+  return 0;
+}
+
+listing 18
+// This example will not work.
+#include <iostream>
+using namespace std;
+
+int main()
+{
+  cout << "start\n";
+
+  try { // start a try block
+    cout << "Inside try block\n";
+    throw 10; // throw an error
+    cout << "This will not execute";
+  }
+  catch (double i) { // Won't work for an int exception
+    cout << "Caught One! Number is: ";
+    cout << i << "\n";
+  }
+
+  cout << "end";
+
+  return 0;
+}
+
+listing 19
+/* Throwing an exception from a function outside
+   the try block. 
+*/
+#include <iostream>
+using namespace std;
+
+void Xtest(int test)
+{
+  cout << "Inside Xtest, test is: " << test << "\n";
+  if(test) throw test;
+}
+
+int main()
+{
+  cout << "start\n";
+
+  try { // start a try block
+    cout << "Inside try block\n";
+    Xtest(0);
+    Xtest(1);
+    Xtest(2);
+  }
+  catch (int i) { // catch an error
+    cout << "Caught One! Number is: ";
+    cout << i << "\n";
+  }
+
+  cout << "end";
+
+  return 0;
+}
+
+listing 20
+#include <iostream>
+using namespace std;
+
+// A try/catch can be inside a function other than main().
+void Xhandler(int test)
+{
+  try{
+    if(test) throw test;
+  }
+  catch(int i) {
+    cout << "Caught One!  Ex. #: " << i << '\n';
+  }
+}
+
+int main()
+{
+  cout << "start\n";
+
+  Xhandler(1);
+  Xhandler(2);
+  Xhandler(0);
+  Xhandler(3);
+
+  cout << "end";
+
+  return 0;
+}
+
+
+listing 21
+#include <iostream>
+using namespace std;
+
+// Different types of exceptions can be caught.
+void Xhandler(int test)
+{
+  try{
+    if(test) throw test;
+    else throw "Value is zero";
+  }
+  catch(int i) {
+    cout << "Caught One!  Ex. #: " << i << '\n';
+  }
+  catch(char *str) {
+    cout << "Caught a string: ";
+    cout << str << '\n';
+  }
+}
+
+int main()
+{
+  cout << "start\n";
+
+  Xhandler(1);
+  Xhandler(2);
+  Xhandler(0);
+  Xhandler(3);
+
+  cout << "end";
+
+  return 0;
+}
+
+listing 22
+int main()
+{
+  throw 12.23;
+
+listing 23
+try {
+  // ...
+  throw 'a';
+  // ...
+}
+catch(char *) {
+ // ...
+}
+
+listing 24
+// This example catches all exceptions.
+#include <iostream>
+using namespace std;
+
+void Xhandler(int test)
+{
+  try{
+    if(test==0) throw test; // throw int
+    if(test==1) throw 'a'; // throw char
+    if(test==2) throw 123.23; // throw double
+  }
+  catch(...) { // catch all exceptions
+    cout << "Caught One!\n";
+  }
+}
+
+int main()
+{
+  cout << "start\n";
+
+  Xhandler(0);
+  Xhandler(1);
+  Xhandler(2);
+
+  cout << "end";
+
+  return 0;
+}
+
+listing 25
+// This example uses catch(...) as a default.
+#include <iostream>
+using namespace std;
+
+void Xhandler(int test)
+{
+  try{
+    if(test==0) throw test; // throw int
+    if(test==1) throw 'a'; // throw char
+    if(test==2) throw 123.23; // throw double
+  }
+  catch(int i) { // catch an int exception
+    cout << "Caught " << i << '\n';
+  }
+  catch(...) { // catch all other exceptions
+    cout << "Caught One!\n";
+  }
+}
+
+int main()
+{
+  cout << "start\n";
+
+  Xhandler(0);
+  Xhandler(1);
+  Xhandler(2);
+
+  cout << "end";
+
+  return 0;
+}
+
+listing 26
+// Restricting function throw types.
+#include <iostream>
+using namespace std;
+
+// This function can only throw ints, chars, and doubles.
+void Xhandler(int test) throw(int, char, double)
+{
+  if(test==0) throw test; // throw int
+  if(test==1) throw 'a'; // throw char
+  if(test==2) throw 123.23; // throw double
+}
+
+int main()
+{
+  cout << "start\n";
+
+  try{
+    Xhandler(0); // also, try passing 1 and 2 to Xhandler()
+  }
+  catch(int i) {
+    cout << "Caught int\n";
+  }
+  catch(char c) { 
+    cout << "Caught char\n";
+  }
+  catch(double d) { 
+    cout << "Caught double\n";
+  }
+
+  cout << "end";
+
+  return 0;
+}
+
+listing 27
+// This function can throw NO exceptions!
+void Xhandler(int test) throw()
+{
+  /* The following statements no longer work.  Instead,
+     They will cause an abnormal program termination. */
+  if(test==0) throw test; 
+  if(test==1) throw 'a'; 
+  if(test==2) throw 123.23; 
+}
+
+listing 28
+// Example of "rethrowing" an exception.
+#include <iostream>
+using namespace std;
+
+void Xhandler()
+{
+  try {
+    throw "hello"; // throw a char *
+  }
+  catch(char *) { // catch a char *
+    cout << "Caught char * inside Xhandler\n";
+    throw ; // rethrow char * out of function
+  }
+}
+
+int main()
+{
+  cout << "start\n";
+
+  try{
+    Xhandler();
+  }
+  catch(char *) {
+    cout << "Caught char * inside main\n";
+  }
+
+  cout << "end";
+
+  return 0;
+}
+
+listing 29
+try {
+  // ...
+  throw 10;
+}
+catch(int *p) {
+  // ...
+}
+
+listing 30
+double divide(double a, double b)
+{
+  // add error handling
+  return a/b;
+}
+
+listing 31
+// Force an allocation failure.
+#include <iostream>
+#include <new>
+using namespace std;
+
+int main()
+{
+  double *p;
+
+  // this will eventually run out of memory
+  do {
+    try { 
+      p = new double[100000];
+    } catch (bad_alloc xa) {
+      cout << "Allocation failure.\n";
+      return 1;
+    }
+    cout << "Allocation OK.\n";
+  } while(p);
+
+  return 0;
+}
+
+listing 32
+ // Demonstrate the new(nothrow) alternative.
+#include <iostream>
+#include <new>
+using namespace std;
+
+int main()
+{
+  double *p;
+
+  // this will eventually run out of memory
+  do {
+    p = new(nothrow) double[100000];
+    if(p) cout << "Allocation OK.\n";
+    else cout << "Allocation Error.\n";
+  } while(p);
+
+  return 0;
+}
+
+listing 33
+p = malloc(sizeof(int));
+
+if(!p) {
+  cout << "Allocation error.\n";
+  exit(1);
+}
+
