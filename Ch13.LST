@@ -1,0 +1,746 @@
+listing 1
+class Base {
+  virtual void f() {}
+};
+
+class Derived : public Base {
+};
+
+int main()
+{
+  Base *p, b_ob;
+  Derived d_ob;
+
+  // ...
+
+listing 2
+namespace MyNameSpace {
+  int i, k;
+  void myfunc(int j) { cout << j; }
+
+  class myclass {
+    int i;
+   public:
+     void seti(int x) { i = x; }
+     int geti() { return i; }
+  };
+}
+
+listing 3
+MyNameSpace::i = 10;
+
+listing 4
+MyNameSpace::myclass ob;
+
+listing 5
+using MyNameSpace::k; // only k is made visible
+k = 10; // OK because k is visible
+
+using namespace MyNameSpace; // all members of MyNameSpace are visible
+i = 10; // OK because all members of MyNameSpace are now visible
+
+listing 6
+// Namespace Demo
+#include <iostream>
+using namespace std;
+
+// define a namespace
+namespace firstNS {
+  class demo {
+    int i;
+  public:
+    demo(int x) { i = x; }
+    void seti(int x) { i = x; }
+    int geti() { return i; }
+  };
+
+  char str[] = "Illustrating namespaces\n";
+  int counter;
+}
+
+// define another namespace
+namespace secondNS {
+  int x, y;
+}
+
+int main()
+{
+  // use scope resolution
+  firstNS::demo ob(10);
+
+  /* Once ob has been declared, its member functions
+     can be used without namespace qualification. */
+  cout << "Value of ob is : " << ob.geti();
+  cout << endl;
+  ob.seti(99);
+  cout << "Value of ob is now : " << ob.geti();
+  cout << endl;
+
+  // bring str into current scope
+  using firstNS::str;
+  cout << str;
+
+  // bring all of firstNS into current scope
+  using namespace firstNS;
+  for(counter = 10; counter; counter--)
+    cout << counter << " ";
+  cout << endl;
+
+  // use secondNS namespace
+  secondNS::x = 10;
+  secondNS::y = 20;
+
+  cout << "x, y: " << secondNS:: x;
+  cout << ", " << secondNS::y << endl;
+
+  // bring another namespace into view
+  using namespace secondNS;
+  demo xob(x), yob(y);
+
+  cout << "xob, yob: " << xob.geti() << ", ";
+  cout << yob.geti() << endl;
+
+  return 0;
+} 
+
+listing 7
+// Namespaces are additive
+#include <iostream>
+using namespace std;
+
+namespace Demo {
+  int a; // In Demo namespace
+}
+
+int x; // this is in global namespace
+
+namespace Demo {
+  int b; // this is in of Demo namespace, too
+}
+
+int main()
+{
+  using namespace Demo;
+
+  a = b = x = 100;
+
+  cout << a << " " << b << " " << x;
+
+  return 0;
+}
+
+listing 8
+using namespace std;
+
+listing 9
+// use explicit std:: qualification.
+#include <iostream>
+
+int main()
+{
+  double val;
+
+  std::cout << "Enter a number: ";
+
+  std::cin >> val;
+
+  std::cout << "This is your number: ";
+  std::cout << val;
+
+  return 0;
+}
+
+listing 10
+// Bring only a few names into the global namespace.
+#include <iostream>
+
+// gain access to cout and cin
+using std::cout;
+using std::cin;
+
+int main()
+{
+  double val;
+
+  cout << "Enter a number: ";
+
+  cin >> val;
+  cout << "This is your number: ";
+  cout << val;
+
+  return 0;
+}
+
+listing 11
+// Convert spaces to |s.
+#include <iostream>
+#include <fstream>
+using namespace std;
+
+int main(int argc, char *argv[])
+{
+  if(argc!=3) {
+    cout << "Usage: CONVERT <input> <output>\n";
+    return 1;
+  }
+
+  ifstream fin(argv[1]); // open input file
+  ofstream fout(argv[2]);  // create output file
+
+  if(!fout) {
+    cout << "Cannot open output file.\n";
+    return 1;
+  }
+  if(!fin) {
+    cout << "Cannot open input file.\n";
+    return 1;
+  }
+
+  char ch;
+
+  fin.unsetf(ios::skipws);  // do not skip spaces
+  while(!fin.eof()) {
+    fin >> ch;
+    if(ch==' ') ch = '|';
+    if(!fin.eof()) fout << ch;
+  }
+
+  fin.close();
+  fout.close();
+
+  return 0;
+}
+
+listing 12
+// A simple conversion function example.
+#include <iostream>
+using namespace std;
+
+class coord {
+  int x, y;
+public:
+  coord(int i, int j) { x = i; y = j; }
+  operator int() { return x*y; } // conversion function
+};
+
+int main()
+{
+  coord o1(2, 3), o2(4, 3);
+  int i;
+
+  i = o1;  // automatically convert to integer
+  cout << i << '\n';
+
+  i = 100 + o2;  // convert o2 to integer
+  cout << i << '\n';
+
+  return 0;
+}
+
+listing 13
+#include <iostream>
+#include <cstring>
+using namespace std;
+
+class strtype {
+  char str[80];
+  int len;
+public:
+  strtype(char *s) { strcpy(str, s); len = strlen(s); }
+  operator char *() { return str; } // convert to char*
+};
+
+int main()
+{
+  strtype s("This is a test\n");
+  char *p, s2[80];
+
+  p = s; // convert to char *
+  cout << "Here is string: " << p << '\n';
+
+  // convert to char * in function call
+  strcpy(s2, s);
+  cout << "Here is copy of string: " << s2 << '\n';
+
+  return 0;
+}
+
+listing 14
+// A static member variable example.
+#include <iostream>
+using namespace std;
+
+class myclass {
+  static int i;
+public:
+  void seti(int n) { i = n; }
+  int geti() { return i; }
+};
+
+// Definition of myclass::i. i is still private to myclass.
+int myclass::i;
+
+int main()
+{
+  myclass o1, o2;
+
+  o1.seti(10); 
+
+  cout << "o1.i: " << o1.geti() << '\n'; // displays 10
+  cout << "o2.i: " << o2.geti() << '\n'; // also displays 10 
+
+  return 0;
+}
+
+listing 15
+// Use a static member variable independent of any object.
+#include <iostream>
+using namespace std;
+
+class myclass {
+public:
+  static int i;
+  void seti(int n) { i = n; }
+  int geti() { return i; }
+};
+
+int myclass::i;
+
+int main()
+{
+  myclass o1, o2;
+
+  // set i directly
+  myclass::i = 100; // no object is referenced.
+
+  cout << "o1.i: " << o1.geti() << '\n'; // displays 100
+  cout << "o2.i: " << o2.geti() << '\n'; // also displays 100
+
+  return 0;
+}
+
+listing 16
+// A shared resource example.
+#include <iostream>
+#include <cstring>
+using namespace std;
+
+class output {
+  static char outbuf[255]; // this is the shared resource
+  static int inuse; // buffer available if 0; in use otherwise
+  static int oindex; // index of outbuf
+  char str[80];
+  int i; // index of next char in str
+  int who; // identifies the object, must be > 0
+public:
+  output(int w, char *s) { strcpy(str, s); i = 0; who = w; }
+
+  /* This function returns -1 if waiting for buffer,
+     it returns 0 if it is done outputting, and
+     it returns who if it is still using the buffer.
+  */
+  int putbuf() 
+  {
+    if(!str[i]) { // done outputting
+      inuse = 0; // release buffer
+      return 0; // signal termination
+    }
+    if(!inuse) inuse = who; // get buffer
+    if(inuse != who) return -1; // in use by someone else
+    if(str[i]) { // still chars to output
+      outbuf[oindex] = str[i];
+      i++; oindex++;
+      outbuf[oindex] = '\0';  // always keep null-terminated
+      return 1;
+    }
+    return 0;
+  }
+  void show() { cout << outbuf << '\n'; }
+};
+
+char output::outbuf[255]; // this is the shared resource
+int output::inuse = 0; // buffer available if 0; in use otherwise
+int output::oindex = 0; // index of outbuf
+
+int main()
+{
+  output o1(1, "This is a test"), o2(2, " of statics");
+
+  while(o1.putbuf() | o2.putbuf()) ; // output chars
+
+  o1.show();
+
+  return 0;
+}
+
+listing 17
+#include <iostream>
+using namespace std;
+
+class static_func_demo {
+  static int i;
+public:
+  static void init(int x) {i = x;}
+  void show() {cout << i;}
+};
+
+int static_func_demo::i; // define i
+
+int main()
+{
+  // init static data before object creation
+  static_func_demo::init(100);
+
+  static_func_demo x;
+  x.show(); // displays 100
+
+  return 0;
+}
+
+listing 18
+class X {
+  int some_var;
+public:
+  int f1() const; // const member function
+};
+
+listing 19
+/*
+   Demonstrate const member functions.
+   This program won't compile.
+*/
+#include <iostream>
+using namespace std;
+
+class Demo {
+  int i;
+public:
+  int geti() const {
+    return i; // ok
+  }
+
+  void seti(int x) const {
+    i = x; // error!
+  }
+};
+
+int main()
+{
+  Demo ob;
+
+  ob.seti(1900); 
+  cout << ob.geti();
+
+  return 0;
+}
+
+listing 20
+// Demonstrate mutable.
+#include <iostream>
+using namespace std;
+
+class Demo {
+  mutable int i;
+  int j;
+public:
+  int geti() const {
+    return i; // ok
+  }
+
+  void seti(int x) const {
+    i = x; // now, OK.
+  }
+
+/* The following function won't compile.
+  void setj(int x) const {
+    j = x; // Still Wrong!
+  }
+*/
+};
+
+int main()
+{
+  Demo ob;
+
+  ob.seti(1900); 
+  cout << ob.geti();
+
+  return 0;
+}
+
+listing 21
+// This program contains an error.
+#include <iostream>
+using namespace std;
+
+class CountDown {
+  int incr;
+  int target;
+  int current;
+public:
+  CountDown(int delay, int i=1) {
+    target = delay;
+    incr = i;
+    current = 0;
+  }
+
+  bool counting() const {
+    current += incr;
+    if(current >= target) {
+      cout << "\a";
+      return false;
+    }
+    cout << current << " ";
+    return true;
+  }
+};
+
+int main()
+{
+  CountDown ob(100, 2);
+
+  while(ob.counting()) ;
+
+  return 0;
+}
+
+listing 22
+#include <iostream>
+using namespace std;
+
+class myclass {
+  int a;
+public:
+  myclass(int x) { a = x; } 
+  int geta() { return a; }
+};
+ 
+int main()
+{
+  myclass ob(4);
+
+  cout << ob.geta();
+
+  return 0;
+}
+
+listing 23
+myclass ob = 4; // automatically converts into myclass(4)
+
+listing 24
+myclass ob(4);
+
+listing 25
+#include <iostream>
+using namespace std;
+
+class myclass {
+  int a;
+public:
+  explicit myclass(int x) { a = x; } 
+  int geta() { return a; }
+};
+
+listing 26
+myclass ob(110); 
+
+listing 27
+#include <iostream>
+#include <cstdlib>
+using namespace std;
+
+class myclass {
+  int a;
+public:
+  myclass(int x) { a = x; } 
+  myclass(char *str) { a = atoi(str); }
+  int geta() { return a; }
+};
+ 
+int main()
+{
+  myclass ob1 = 4;     // converts to myclass(4)
+  myclass ob2 = "123"; // converts to myclass("123");
+
+  cout << "ob1: " << ob1.geta() << endl;
+  cout << "ob2: " << ob2.geta() << endl;
+
+  return 0;
+}
+
+listing 28
+int main()
+{
+  myclass ob1 = 4;     // converts to myclass(4)
+  myclass ob2 = "123"; // converts to myclass("123");
+
+  cout << "ob1: " << ob1.geta() << endl;
+  cout << "ob2: " << ob2.geta() << endl;
+
+  // use automatic conversions to assign new values
+  ob1 = "1776"; // converts into ob1 = myclass("1776");
+  ob2 = 2001;   // converts into ob2 = myclass(2001);
+
+  cout << "ob1: " << ob1.geta() << endl;
+  cout << "ob2: " << ob2.geta() << endl;
+
+  return 0;
+}
+
+listing 29
+#include <iostream>
+#include <cstdlib>
+using namespace std;
+
+class myclass {
+  int a;
+public:
+  explicit myclass(int x) { a = x; } 
+  explicit myclass(char *str) { a = atoi(str); }
+  int geta() { return a; }
+};
+
+listing 30
+class Demo {
+  double x
+public:
+  Demo(double i) { x = i; }
+  // ...
+};
+
+// ...
+Demo counter = 10;
+
+listing 31
+// Illustrate linkage specifier.
+#include <iostream>
+using namespace std;
+
+extern "C" int func(int x); // link as C function
+
+// This function now links as a C function.
+int func(int x)
+{
+  return x/3;
+}
+
+listing 32
+extern "C" {
+  void f1();
+  int f2(int x);
+  double f3(double x, int *p);
+}
+
+listing 33
+// Don't try this function!
+void func()
+{
+  asm("mov bp, sp");
+  asm("push ax");
+  asm("mov cl, 4");
+  // ...
+}
+
+listing 34
+// A short example using array-based output.
+#include <iostream>
+#include <strstream>
+using namespace std;
+
+int main()
+{
+  char buf[255]; // output buffer
+
+  ostrstream ostr(buf, sizeof buf); // open output array
+
+  ostr << "Array-based I/O uses streams just like ";
+  ostr << "'normal' I/O\n" << 100;
+  ostr << ' ' << 123.23 << '\n';
+  
+  // you can use manipulators, too
+  ostr << hex << 100 << ' ';
+  // or format flags
+  ostr.setf(ios::scientific);
+  ostr << dec << 123.23;
+  ostr << endl << ends; // ensure that buffer is null-terminated
+
+  // show resultant string
+  cout << buf;
+
+  return 0;
+}
+
+listing 35
+// An example using array-based input.
+#include <iostream>
+#include <strstream>
+using namespace std;
+
+int main()
+{
+  char buf[] = "Hello 100 123.125 a";
+
+  istrstream istr(buf); // open input array
+
+  int i;
+  char str[80];
+  float f;
+  char c;
+
+  istr >> str >> i >> f >> c;
+
+  cout << str << ' ' << i << ' ' << f;
+  cout << ' ' << c << '\n';
+  return 0;
+}
+
+listing 36
+// Demonstrate get() and eof() with array-based I/O. 
+#include <iostream>
+#include <strstream>
+using namespace std;
+
+int main()
+{
+  char buf[] = "Hello 100 123.125 a";
+
+  istrstream istr(buf);
+  char c;
+
+  while(!istr.eof()) {
+    istr.get(c);
+    if(!istr.eof()) cout << c;
+  }
+
+  return 0;
+}
+
+listing 37
+// Demonstrate an input/output array.
+#include <iostream>
+#include <strstream>
+using namespace std;
+
+int main()
+{
+  char iobuf[255];
+
+  strstream iostr(iobuf, sizeof iobuf);
+
+  iostr << "This is a test\n";
+  iostr << 100 << hex << ' ' << 100 << ends;
+
+  char str[80];
+  int i;
+
+  iostr.getline(str, 79); // read string up to \n
+  iostr >> dec >> i; // read 100
+
+  cout << str << ' ' << i << ' ';
+
+  iostr >> hex >> i;
+  cout <<  hex << i;
+
+  return 0;
+}
+
