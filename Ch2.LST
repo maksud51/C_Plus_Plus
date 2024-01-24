@@ -1,0 +1,1150 @@
+listing 1
+#include <iostream>
+using namespace std;
+
+class myclass {
+  int i;
+public:
+.
+.
+.
+};
+
+int main()
+{
+  myclass ob;
+  ob.i = 10;
+.
+.
+.
+}
+
+listing 2
+#include <iostream>
+using namespace std;
+
+class myclass {
+  int a;
+public:
+  myclass(); // constructor
+  void show();
+};
+
+myclass::myclass()
+{
+  cout << "In constructor\n";
+  a = 10;
+}
+
+void myclass::show()
+{
+  cout << a;
+}
+
+int main()
+{
+  myclass ob;
+
+  ob.show();
+
+  return 0;
+}
+
+listing 3
+#include <iostream>
+using namespace std;
+
+class myclass {
+  int a;
+public:
+  myclass(); // constructor
+  ~myclass(); // destructor
+  void show();
+};
+
+myclass::myclass()
+{
+  cout << "In constructor\n";
+  a = 10;
+}
+myclass::~myclass()
+{
+  cout << "Destructing...\n";
+}
+
+void myclass::show()
+{
+  cout << a << "\n";
+}
+
+int main()
+{
+  myclass ob;
+
+  ob.show();
+
+  return 0;
+}
+
+listing 4
+#include <iostream>
+using namespace std;
+
+#define SIZE 10
+
+// Declare a stack class for characters.
+class stack { 
+  char stck[SIZE]; // holds the stack
+  int tos; // index of top-of-stack
+public:
+  stack(); // constructor
+  void push(char ch); // push character on stack
+  char pop(); // pop character from stack
+};
+
+// Initialize the stack.
+stack::stack()
+{
+  cout << "Constructing a stack\n";
+  tos = 0;
+}
+
+// Push a character.
+void stack::push(char ch)
+{
+  if(tos==SIZE) {
+    cout << "Stack is full\n";
+    return;
+  }
+  stck[tos] = ch;
+  tos++;
+}
+
+// Pop a character.
+char stack::pop()
+{
+  if(tos==0) {
+    cout << "Stack is empty\n";
+    return 0; // return null on empty stack 
+  }
+  tos--;
+  return stck[tos];
+}
+
+int main()
+{
+  // Create two stacks that are automatically initialized.
+  stack s1, s2; 
+  int i;
+
+  s1.push('a');
+  s2.push('x');
+  s1.push('b');
+  s2.push('y');
+  s1.push('c');
+  s2.push('z');
+
+  for(i=0; i<3; i++) cout << "Pop s1: " << s1.pop() << "\n";
+  for(i=0; i<3; i++) cout << "Pop s2: " << s2.pop() << "\n";
+
+  return 0;
+}
+
+listing 5
+#include <iostream>
+#include <cstring>
+#include <cstdlib>
+using namespace std;
+
+#define SIZE 255
+
+class strtype {
+  char *p;
+  int len;
+public:
+  strtype(); // constructor
+  ~strtype(); //destructor
+  void set(char *ptr);
+  void show();
+};
+
+// Initialize a string object.
+strtype::strtype()
+{
+  p = (char *) malloc(SIZE);
+  if(!p) {
+    cout << "Allocation error\n";
+    exit(1);
+  }
+  *p = '\0';
+  len = 0;
+}
+
+// Free memory when destroying string object.
+strtype::~strtype()
+{
+  cout << "Freeing p\n";
+  free(p);
+}
+
+void strtype::set(char *ptr)
+{
+  if(strlen(p) >= SIZE) {
+    cout << "String too big\n";
+    return;
+  }
+  strcpy(p, ptr);
+  len = strlen(p);
+}
+
+void strtype::show()
+{
+  cout << p << " - length: " << len;
+  cout << "\n";
+}
+
+int main()
+{
+  strtype s1, s2;
+
+  s1.set("This is a test.");
+  s2.set("I like C++.");
+
+  s1.show();
+  s2.show();
+
+  return 0;
+}
+
+listing 6
+#include <iostream>
+#include <ctime>
+using namespace std;
+
+class timer {
+  clock_t start;
+public:
+  timer(); // constructor
+  ~timer(); // destructor
+};
+
+timer::timer()
+{
+  start = clock();
+}
+
+timer::~timer()
+{
+  clock_t end;
+
+  end = clock();
+  cout << "Elapsed time: " << (end-start) / CLOCKS_PER_SEC << "\n";
+}
+
+int main()
+{
+  timer ob;
+  char c;
+
+  // delay ...
+  cout << "Press a key followed by ENTER: ";
+  cin >> c;
+
+  return 0;
+}
+
+listing 7
+class sample {
+  double a, b, c;
+public:
+  double sample();  // error, why?
+};
+
+listing 8
+#include <iostream>
+using namespace std;
+
+class myclass {
+  int a;
+public:
+  myclass(int x); // constructor
+  void show();
+};
+
+myclass::myclass(int x)
+{
+  cout << "In constructor\n";
+  a = x;
+}
+void myclass::show()
+{
+  cout << a << "\n";
+}
+
+int main()
+{
+  myclass ob(4);
+
+  ob.show();
+
+  return 0;
+}
+
+listing 9
+myclass ob = myclass(4);
+
+listing 10
+#include <iostream>
+using namespace std;
+
+class myclass {
+  int a, b;
+public:
+  myclass(int x, int y); // constructor
+  void show();
+};
+
+myclass::myclass(int x, int y)
+{
+  cout << "In constructor\n";
+  a = x;
+  b = y;
+}
+
+void myclass::show()
+{
+  cout << a << ' ' << b << "\n";
+}
+
+int main()
+{
+  myclass ob(4, 7);
+
+  ob.show();
+
+  return 0;
+}
+
+listing 11
+#include <iostream>
+using namespace std;
+
+#define SIZE 10
+
+// Declare a stack class for characters.
+class stack { 
+  char stck[SIZE]; // holds the stack
+  int tos; // index of top-of-stack
+  char who; // identifies stack
+public:
+  stack(char c); // constructor
+  void push(char ch); // push character on stack
+  char pop(); // pop character from stack
+};
+
+// Initialize the stack.
+stack::stack(char c)
+{
+  tos = 0;
+  who = c;
+  cout << "Constructing stack " << who << "\n";
+}
+
+// Push a character.
+void stack::push(char ch)
+{
+  if(tos==SIZE) {
+    cout << "Stack " << who << " is full\n";
+    return;
+  }
+  stck[tos] = ch;
+  tos++;
+}
+
+// Pop a character.
+char stack::pop()
+{
+  if(tos==0) {
+    cout << "Stack " << who << " is empty\n";
+    return 0; // return null on empty stack 
+  }
+  tos--;
+  return stck[tos];
+}
+
+int main()
+{
+  // Create two stacks that are automatically initialized.
+  stack s1('A'), s2('B'); 
+  int i;
+
+  s1.push('a');
+  s2.push('x');
+  s1.push('b');
+  s2.push('y');
+  s1.push('c');
+  s2.push('z');
+
+  // This will generate some error messages.
+  for(i=0; i<5; i++) cout << "Pop s1: " << s1.pop() << "\n";
+  for(i=0; i<5; i++) cout << "Pop s2: " << s2.pop() << "\n";
+
+  return 0;
+}
+
+listing 12
+#include <iostream>
+#include <cstring>
+#include <cstdlib>
+using namespace std;
+
+class strtype {
+  char *p;
+  int len;
+public:
+  strtype(char *ptr);
+  ~strtype();
+  void show();
+};
+
+strtype::strtype(char *ptr)
+{
+  len = strlen(ptr);
+  p = (char *) malloc(len+1);
+  if(!p) {
+    cout << "Allocation error\n";
+    exit(1);
+  }
+  strcpy(p, ptr);
+}
+
+strtype::~strtype()
+{
+  cout << "Freeing p\n";
+  free(p);
+}
+
+void strtype::show()
+{
+  cout << p << " - length: " << len;
+  cout << "\n";
+}
+
+int main()
+{
+  strtype s1("This is a test."), s2("I like C++.");
+
+  s1.show();
+  s2.show();
+  return 0;
+}
+
+listing 13
+#include <iostream>
+using namespace std;
+
+class myclass {
+  int i, j;
+public:
+  myclass(int a, int b);
+  void show();
+};
+
+myclass::myclass(int a, int b)
+{
+  i = a;
+  j = b;
+}
+
+void myclass::show()
+{
+  cout << i << ' ' << j << "\n";
+}
+
+int main()
+{
+  int x, y;
+
+  cout << "Enter two integers: ";
+  cin >> x >> y;
+
+  // use variables to construct ob
+  myclass ob(x, y);
+
+  ob.show();
+
+  return 0;
+}
+
+listing 14
+// Define base class.
+class B {
+  int i;
+public:
+  void set_i(int n);
+  int get_i();
+};
+
+listing 15
+// Define derived class.
+class D : public B {
+  int j;
+public:
+  void set_j(int n);
+  int mul();
+};
+
+listing 16
+// A simple example of inheritance.
+#include <iostream>
+using namespace std;
+
+// Define base class.
+class base {
+  int i;
+public:
+  void set_i(int n);
+  int get_i();
+};
+
+// Define derived class.
+class derived : public base {
+  int j;
+public:
+  void set_j(int n);
+  int mul();
+};
+
+// Set value i in base.
+void base::set_i(int n)
+{
+  i = n;
+}
+
+// Return value of i in base.
+int base::get_i()
+{
+  return i;
+}
+
+// Set value of j in derived.
+void derived::set_j(int n)
+{
+  j = n;
+}
+
+// Return value of base's i times derived's j.
+int derived::mul()
+{
+  // derived class can call base class public member functions
+  return j * get_i();
+}
+
+int main()
+{
+  derived ob;
+
+  ob.set_i(10); // load i in base
+  ob.set_j(4);  // load j in derived
+
+  cout << ob.mul();  // displays 40
+
+  return 0;
+}
+
+listing 17
+// An example of class inheritance.
+#include <iostream>
+#include <cstring>
+using namespace std;
+
+enum yn {no, yes};
+enum color {red, yellow, green, orange};
+
+void out(enum yn x);
+
+char *c[] = {
+  "red", "yellow", "green", "orange"};
+
+// Generic fruit class.
+class fruit {
+// in this base, all elements are public
+public: 
+  enum yn annual;  
+  enum yn perennial;
+  enum yn tree;
+  enum yn tropical;
+  enum color clr;
+  char name[40];
+};
+
+// Derive Apple class.
+class Apple : public fruit {
+  enum yn cooking;
+  enum yn crunchy;
+  enum yn eating;
+public:
+  void seta(char *n, enum color c, enum yn ck, enum yn crchy,
+            enum yn e);
+  void show();
+};
+
+// Derive orange class.
+class Orange : public fruit {
+  enum yn juice;
+  enum yn sour;
+  enum yn eating;
+public:
+  void seto(char *n, enum color c, enum yn j, enum yn sr, 
+            enum yn e);
+  void show();
+};
+
+void Apple::seta(char *n, enum color c, enum yn ck,
+                 enum yn crchy, enum yn e)
+{
+  strcpy(name, n);
+  annual = no;
+  perennial = yes;
+  tree = yes;
+  tropical = no;
+  clr = c;
+  cooking = ck;
+  crunchy = crchy;
+  eating = e;
+}
+
+void Orange::seto(char *n, enum color c, enum yn j,
+                  enum yn sr, enum yn e)
+{
+  strcpy(name, n);
+  annual = no;
+  perennial = yes;
+  tree = yes;
+  tropical = yes;
+  clr = c;
+  juice = j;
+  sour = sr;
+  eating = e;
+}
+
+void Apple::show()
+{
+  cout << name << " apple is: " << "\n";
+  cout << "Annual: ";  out(annual);
+  cout << "Perennial: ";  out(perennial);
+  cout << "Tree: "; out(tree);
+  cout << "Tropical: "; out(tropical);
+  cout << "Color: " << c[clr] << "\n";
+  cout << "Good for cooking: "; out(cooking);
+  cout << "Crunchy: ";  out(crunchy);
+  cout << "Good for eating: ";  out(eating);
+  cout << "\n";
+}
+
+void Orange::show()
+{
+  cout << name << " orange is: " << "\n";
+  cout << "Annual: ";  out(annual);
+  cout << "Perennial: ";  out(perennial);
+  cout << "Tree: ";  out(tree);
+  cout << "Tropical: ";  out(tropical);
+  cout << "Color: " << c[clr] << "\n";
+  cout << "Good for juice: ";  out(juice);
+  cout << "Sour: ";  out(sour);
+  cout << "Good for eating: ";  out(eating);
+  cout << "\n";
+}
+
+void out(enum yn x)
+{
+  if(x==no) cout << "no\n";
+  else cout << "yes\n";
+}
+
+int main()
+{
+  Apple a1, a2;
+  Orange o1, o2;
+
+  a1.seta("Red Delicious", red, no, yes, yes);
+  a2.seta("Jonathan", red, yes, no, yes);
+
+  o1.seto("Navel", orange, no, no, yes);
+  o2.seto("Valencia", orange, yes, yes, no);
+
+  a1.show();
+  a2.show();
+
+  o1.show();
+  o2.show();
+
+  return 0;
+}
+
+listing 18
+class area_cl {
+public:
+  double height;
+  double width;
+};
+
+listing 19
+#include <iostream>
+using namespace std;
+
+class myclass {
+  int a;
+public:
+  myclass(int x); // constructor
+  int get();
+};
+
+myclass::myclass(int x)
+{
+  a = x;
+}
+
+int myclass::get()
+{
+  return a;
+}
+
+int main()
+{
+  myclass ob(120);  // create object
+  myclass *p;  // create pointer to object
+
+  p = &ob; // put address of ob into p
+
+  cout << "Value using object: " << ob.get();
+  cout << "\n";
+
+  cout << "Value using pointer: " << p->get();
+
+  return 0;
+}
+
+listing 20
+myclass *p;
+
+listing 21
+p = &ob;
+
+listing 22
+union { // an anonymous union
+  int i;
+  char ch[4];
+} ;
+
+i = 10; // access i and ch directly
+ch[0] = 'X';
+
+listing 23
+#include <iostream>
+#include <cstring>
+using namespace std;
+
+// use struct to define a class type
+struct st_type {
+  st_type(double b, char *n);
+  void show();
+private:
+  double balance;
+  char name[40];
+} ;
+
+st_type::st_type(double b, char *n)
+{
+  balance = b;
+  strcpy(name, n);
+}
+
+void st_type::show()
+{
+  cout << "Name: " << name;
+  cout << ": $" << balance;
+  if(balance<0.0) cout << "***";
+  cout << "\n";
+}
+
+int main()
+{
+  st_type acc1(100.12, "Johnson");
+  st_type acc2(-12.34, "Hedricks");
+
+  acc1.show();
+  acc2.show();
+  return 0;
+}
+
+listing 24
+#include <iostream>
+#include <cstring>
+using namespace std;
+
+class cl_type {
+  double balance;
+  char name[40];
+public:
+  cl_type(double b, char *n);
+  void show();
+} ;
+
+cl_type::cl_type(double b, char *n)
+{
+  balance = b;
+  strcpy(name, n);
+}
+
+void cl_type::show()
+{
+  cout << "Name: " << name;
+  cout << ": $" << balance;
+  if(balance<0.0) cout << "***";
+  cout << "\n";
+}
+
+int main()
+{
+  cl_type acc1(100.12, "Johnson");
+  cl_type acc2(-12.34, "Hedricks");
+
+  acc1.show();
+  acc2.show();
+
+  return 0;
+}
+
+listing 25
+#include <iostream>
+using namespace std;
+
+union bits {
+  bits(double n);
+  void show_bits();
+  double d;
+  unsigned char c[sizeof(double)];
+};
+
+bits::bits(double n)
+{
+  d = n;
+}
+
+void bits::show_bits()
+{
+  int i, j;
+
+  for(j = sizeof(double)-1; j>=0; j--) {
+    cout << "Bit pattern in byte " << j << ": ";
+    for(i = 128; i; i >>= 1) 
+      if(i & c[j]) cout << "1";
+      else cout << "0";
+    cout << "\n";
+  }
+}
+
+int main()
+{
+  bits ob(1991.829);
+
+  ob.show_bits();
+
+  return 0;
+}
+
+listing 26
+#include <iostream>
+#include <cstring>
+#include <cstdlib>
+using namespace std;
+
+struct strtype {
+  strtype(char *ptr);
+  ~strtype();
+  void show();
+private:
+  char *p;
+  int len;
+};
+
+strtype::strtype(char *ptr)
+{
+  len = strlen(ptr);
+  p = (char *) malloc(len+1);
+  if(!p) {
+    cout << "Allocation error\n";
+    exit(1);
+  }
+  strcpy(p, ptr);
+}
+
+strtype::~strtype()
+{
+  cout << "Freeing p\n";
+  free(p);
+}
+
+void strtype::show()
+{
+  cout << p << " - length: " << len;
+  cout << "\n";
+}
+
+int main()
+{
+  strtype s1("This is a test."), s2("I like C++.");
+
+  s1.show();
+  s2.show();
+
+  return 0;
+}
+
+listing 27
+// Using an anonymous union.
+#include <iostream>
+using namespace std;
+
+int main()
+{
+  union {
+    unsigned char bytes[8];
+    double value;
+  };
+  int i;
+
+  value = 859345.324;
+
+  // display the bytes within a double
+  for(i=0; i<8; i++)
+    cout << (int) bytes[i] << " ";
+
+  return 0;
+}
+
+listing 28
+// Example of an in-line function
+#include <iostream>
+using namespace std;
+
+inline int even(int x) 
+{
+  return !(x%2);
+}
+
+int main()
+{
+  if(even(10)) cout << "10 is even\n";
+  if(even(11)) cout << "11 is even\n";
+
+  return 0;
+}
+
+listing 29
+if(even(10))  cout << "10 is even\n";
+
+listing 30
+if(!(10%2)) cout << "10 is even\n";
+
+listing 31
+// Demonstrate in-lining a member function.
+#include <iostream>
+using namespace std;
+
+class samp {
+  int i, j;
+public:
+  samp(int a, int b);
+  int divisible(); // in-lined in its definition
+};
+
+samp::samp(int a, int b)
+{
+  i = a;
+  j = b;
+}
+
+/* Return 1 if i is evenly divisible by j.
+   This member function is expanded in line.
+*/
+inline int samp::divisible()
+{
+  return !(i%j);
+}
+
+int main()
+{
+  samp ob1(10, 2), ob2(10, 3);
+
+  // this is true
+  if(ob1.divisible()) cout << "10 divisible by 2\n";
+
+  // this is false
+  if(ob2.divisible()) cout << "10 divisible by 3\n";
+
+  return 0;
+}
+
+listing 32
+#include <iostream>
+using namespace std;
+
+// Overload min() three ways.
+
+// integers
+inline int min(int a, int b)
+{
+  return a<b ? a : b;
+}
+
+// longs
+inline long min(long a, long b)
+{
+  return a<b ? a : b;
+}
+
+// doubles
+inline double min(double a, double b)
+{
+  return a<b ? a : b;
+}
+
+int main()
+{
+  cout << min(-10, 10) << "\n";
+  cout << min(-10.01, 100.002) << "\n";
+  cout << min(-10L, 12L) << "\n";
+
+  return 0;
+}
+
+listing 33
+void f1()
+{  
+  int i;
+
+  for(i=0; i<10; i++) cout << i;
+}
+
+listing 34
+#include <iostream>
+using namespace std;
+
+class samp {
+  int i, j;
+public:
+  samp(int a, int b);
+
+  /* divisible() is defined here and automatically
+     in-lined. */
+  int divisible() { return !(i%j); }
+};
+
+samp::samp(int a, int b)
+{
+  i = a;
+  j = b;
+}
+
+int main()
+{
+  samp ob1(10, 2), ob2(10, 3);
+
+  // this is true
+  if(ob1.divisible()) cout << "10 divisible by 2\n";
+
+  // this is false
+  if(ob2.divisible()) cout << "10 divisible by 3\n";
+
+  return 0;
+}
+
+listing 35
+class samp {
+  int i, j;
+public:
+  samp(int a, int b);
+
+  /* divisible() is defined here and automatically
+     inlined. */
+  int divisible()
+  { 
+    return !(i%j);
+  }
+};
+
+listing 36
+#include <iostream>
+using namespace std;
+
+class samp {
+  int i, j;
+public:
+  // inline constructor
+  samp(int a, int b) { i = a; j = b; }
+  int divisible() { return !(i%j); }
+};
+
+listing 37
+class myclass {
+  int i;
+public:
+  myclass(int n) { i = n; }
+  void show() { cout << i; }
+};
+
+listing 38
+#include <iostream>
+using namespace std;
+
+int main()
+{
+  int i = 10;
+  long l = 1000000;
+  double d = -0.0009;
+
+  cout << i << ' ' << l << ' ' << d;
+  cout << "\n";
+
+  return 0;
+}
+
+listing 39
+#include <iostream>
+using namespace std;
+
+class myclass {
+  int i, j;
+public:
+  myclass(int x, int y);
+  void show();
+};
+
+myclass::myclass(int x, int y)
+{
+  i = x;
+  j = y;
+}
+
+void myclass::show()
+{
+  cout << i << " " << j << "\n";
+}
+
+int main()
+{
+  myclass count(2, 3);
+
+  count.show();
+
+  return 0;
+}
+
+listing 40
+union {
+  float f;
+  unsigned int bits;
+} ;
+
