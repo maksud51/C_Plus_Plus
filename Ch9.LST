@@ -1,0 +1,750 @@
+listing 1
+class date {
+  char d[9]; // store date as string: mm/dd/yy
+public:
+  // add inserter and extractor
+};
+
+listing 2
+#include <iostream>
+using namespace std;
+
+ostream &setup(ostream &stream)
+{
+  stream.width(10);
+  stream.precision(4);
+  stream.fill('*');
+
+  return stream;
+}
+
+int main()
+{
+  cout << setup << 123.123456;
+
+  return 0;
+}
+
+listing 3
+#include <iostream>
+using namespace std;
+
+// Attention:
+ostream &atn(ostream &stream)
+{
+  stream << "Attention: ";
+  return stream;
+}
+
+// Please note:
+ostream &note(ostream &stream)
+{
+  stream << "Please Note: ";
+  return stream;
+}
+
+int main()
+{
+  cout << atn << "High voltage circuit\n";
+  cout << note << "Turn off all lights\n";
+
+  return 0;
+}
+
+listing 4
+#include <iostream>
+#include <cstring>
+using namespace std;
+
+// A simple input manipulator
+istream &getpass(istream &stream)
+{
+  cout << '\a';  // sound bell
+  cout << "Enter password: ";
+
+  return stream;
+}
+
+int main()
+{
+  char pw[80];
+
+  do {
+    cin >> getpass >> pw;
+  } while (strcmp(pw, "password"));
+
+  cout << "Logon complete\n";
+
+  return 0;
+}
+
+listing 5
+ifstream in;  // input
+ofstream out; // output
+fstream io;   // input and output
+
+listing 6
+if(!mystream) {
+  cout << "Cannot open file.\n";
+  // handle error
+}
+
+listing 7
+if(!mystream.is_open()) {
+  cout << "File is not open.\n";
+  // ...
+
+listing 8
+ifstream  mystream("myfile"); // open file for input
+
+listing 9
+mystream.close();
+
+listing 10
+#include <iostream>
+#include <fstream>
+using namespace std;
+
+int main()
+{
+  ofstream fout("test");  // create output file
+
+  if(!fout) {
+    cout << "Cannot open output file.\n";
+    return 1;
+  }
+
+  fout << "Hello!\n";
+  fout << 100 << ' ' << hex << 100 << endl;
+
+  fout.close();
+
+  ifstream fin("test"); // open input file
+
+  if(!fin) {
+    cout << "Cannot open input file.\n";
+    return 1;
+  }
+
+  char str[80];
+  int i;
+
+  fin >> str >> i;
+  cout << str << ' ' << i << endl;
+
+  fin.close();
+
+  return 0;
+}
+
+listing 11
+#include <iostream>
+#include <fstream>
+using namespace std;
+
+int main(int argc, char *argv[])
+{
+  if(argc!=2) {
+    cout << "Usage: WRITE <filename>\n";
+    return 1;
+  }
+
+  ofstream out(argv[1]); // output file
+
+  if(!out) {
+    cout << "Cannot open output file.\n";
+    return 1;
+  }
+
+  char str[80];
+  cout << "Write strings to disk, '$' to stop\n";
+
+  do {
+    cout << ": ";
+    cin >> str;
+    out << str << endl;
+  } while (*str != '$');
+
+  out.close();
+  return 0;
+}
+
+listing 12
+// Convert spaces to |s.
+#include <iostream>
+#include <fstream>
+using namespace std;
+
+int main(int argc, char *argv[])
+{
+  if(argc!=3) {
+    cout << "Usage: CONVERT <input> <output>\n";
+    return 1;
+  }
+
+  ifstream fin(argv[1]); // open input file
+  ofstream fout(argv[2]);  // create output file
+
+  if(!fout) {
+    cout << "Cannot open output file.\n";
+    return 1;
+  }
+  if(!fin) {
+    cout << "Cannot open input file.\n";
+    return 1;
+  }
+
+  char ch;
+
+  fin.unsetf(ios::skipws);  // do not skip spaces
+  while(!fin.eof()) {
+    fin >> ch;
+    if(ch==' ') ch = '|';
+    if(!fin.eof()) fout << ch;
+  }
+
+  fin.close();
+  fout.close();
+
+  return 0;
+}
+
+listing 13
+fstream mystream;
+mystream.open("test", ios::in | ios::out);
+
+listing 14
+#include <iostream>
+#include <fstream>
+using namespace std;
+
+int main(int argc, char *argv[])
+{
+  char ch;
+
+  if(argc!=2) {
+    cout << "Usage: PR <filename>\n";
+    return 1;
+  }
+
+  ifstream in(argv[1], ios::in | ios::binary);
+  if(!in) {
+    cout << "Cannot open file.\n";
+    return 1;
+  }
+
+  while(!in.eof()) {
+    in.get(ch);
+    cout << ch;
+  }
+
+  in.close();
+
+  return 0;
+}
+
+listing 15
+#include <iostream>
+#include <fstream>
+using namespace std;
+
+int main(int argc, char *argv[])
+{
+  char ch;
+
+  if(argc!=2) {
+    cout << "Usage: WRITE <filename>\n";
+    return 1;
+  }
+
+  ofstream out(argv[1], ios::out | ios::binary);
+
+  if(!out) {
+    cout << "Cannot open file.\n";
+    return 1;
+  }
+
+  cout << "Enter a $ to stop\n";
+  do {
+    cout << ": ";
+    cin.get(ch);
+    out.put(ch);
+  } while (ch!='$');
+
+  out.close();
+
+  return 0;
+}
+
+listing 16
+#include <iostream>
+#include <fstream>
+#include <cstring>
+using namespace std;
+
+int main()
+{
+  ofstream out("test", ios::out | ios::binary);
+
+  if(!out) {
+    cout << "Cannot open output file.\n";
+    return 1;
+  }
+
+  double num = 100.45;
+  char str[] = "This is a test";
+
+  out.write((char *) &num, sizeof(double));
+  out.write(str, strlen(str));
+
+  out.close();
+
+  return 0;
+}
+
+listing 17
+#include <iostream>
+#include <fstream>
+using namespace std;
+
+int main()
+{
+  ifstream in("test", ios::in | ios::binary);
+
+  if(!in) {
+    cout << "Cannot open input file.\n";
+    return 1;
+  }
+
+  double num;
+  char str[80];
+
+  in.read((char *) &num, sizeof(double));
+  in.read(str, 14);
+  str[14] = '\0'; // null terminate str
+
+  cout << num << ' ' << str;
+
+  in.close();
+
+  return 0;
+}
+
+listing 18
+// Demonstrate gcount().
+#include <iostream>
+#include <fstream>
+using namespace std;
+
+int main()
+{
+  ofstream out("test", ios::out | ios::binary);
+
+  if(!out) {
+    cout << "Cannot open output file.\n";
+    return 1;
+  }
+
+  double nums[4] = {1.1, 2.2, 3.3, 4.4 };
+
+  out.write((char *) nums, sizeof(nums));
+  out.close();
+
+  ifstream in("test", ios::in | ios::binary);
+
+  if(!in) {
+    cout << "Cannot open input file.\n";
+    return 1;
+  }
+
+  in.read((char *) &nums, sizeof(nums));
+
+  int i;
+  for(i=0; i<4; i++) 
+    cout << nums[i] << ' ';
+
+  cout << '\n';
+
+  cout << in.gcount() << " characters read\n";
+  in.close();
+
+  return 0;
+}
+
+listing 19
+class account {
+  int custnum;
+  char name[80];
+  double balance;
+public:
+  account(int c, char *n, double b) 
+  {
+    custnum = c;
+    strcpy(name, n);
+    balance = b;
+  }
+  // create inserter here
+};
+
+listing 20
+// Use getline() to read a string that contains spaces.
+#include <iostream>
+#include <fstream>
+using namespace std;
+
+int main()
+{ 
+  char str[80];
+
+  cout << "Enter your name: ";
+  cin.getline(str, 79);
+
+  cout << str << '\n';
+
+  return 0;
+}
+
+listing 21
+// Demonstrate peek().
+#include <iostream>
+#include <fstream>
+#include <cctype>
+using namespace std;
+
+int main()
+{ 
+  char ch;
+  ofstream out("test", ios::out | ios::binary);
+
+  if(!out) {
+    cout << "Cannot open output file.\n";
+    return 1;
+  }
+
+  char str[80], *p;
+ 
+  out << 123 << "this is a test" << 23;
+  out << "Hello there!" << 99 << "sdf" << endl;
+  out.close();
+  
+  ifstream in("test", ios::in | ios::binary);
+
+  if(!in) {
+    cout << "Cannot open input file.\n";
+    return 1;
+  }
+
+  do {
+    p = str;
+    ch = in.peek(); // see what type of char is next
+    if(isdigit(ch)) {
+      while(isdigit(*p=in.get())) p++; // read integer
+      in.putback(*p); // return char to stream
+      *p = '\0'; // null terminate the string
+      cout << "Integer: " << atoi(str);
+    }
+    else if(isalpha(ch)) { // read a string
+      while(isalpha(*p=in.get())) p++;
+      in.putback(*p); // return char to stream
+      *p = '\0'; // null terminate the string
+      cout << "String: " << str;
+    }
+    else in.get(); // ignore
+    cout << '\n';
+  } while(!in.eof());
+  
+  in.close();
+  return 0;
+}
+
+listing 22
+#include <iostream>
+#include <fstream>
+#include <cstdlib>
+using namespace std;
+
+int main(int argc, char *argv[])
+{
+  if(argc!=4) {
+    cout << "Usage: CHANGE <filename> <byte> <char>\n";
+    return 1;
+  }
+
+  fstream out(argv[1], ios::in | ios::out | ios::binary);
+
+  if(!out) {
+    cout << "Cannot open file.\n";
+    return 1;
+  }
+
+  out.seekp(atoi(argv[2]), ios::beg);
+
+  out.put(*argv[3]);
+  out.close();
+
+  return 0;
+}
+
+listing 23
+// Demonstrate seekg().
+#include <iostream>
+#include <fstream>
+#include <cstdlib>
+using namespace std;
+
+int main(int argc, char *argv[])
+{
+  char ch;
+
+  if(argc!=3) {
+    cout << "Usage: LOCATE <filename> <loc>\n";
+    return 1;
+  }
+
+  ifstream in(argv[1], ios::in | ios::binary);
+
+  if(!in) {
+    cout << "Cannot open input file.\n";
+    return 1;
+  }
+
+  in.seekg(atoi(argv[2]), ios::beg);
+
+  while(!in.eof()) { 
+    in.get(ch);
+    cout << ch;
+  }
+
+  in.close();
+
+  return 0;
+}
+
+listing 24
+#include <iostream>
+#include <fstream>
+using namespace std;
+
+void checkstatus(ifstream &in);
+
+int main(int argc, char *argv[])
+{
+  if(argc!=2) {
+    cout << "Usage: DISPLAY <filename>\n";
+    return 1;
+  }
+
+  ifstream in(argv[1]);
+
+  if(!in) {
+    cout << "Cannot open input file.\n";
+    return 1;
+  }
+
+  char c;
+  while(in.get(c)) {
+    cout << c;
+    checkstatus(in);
+  }
+
+  checkstatus(in);  // check final status
+  in.close();
+
+  return 0;
+}
+
+void checkstatus(ifstream &in)
+{
+  ios::iostate i;
+
+  i = in.rdstate();
+  
+  if(i & ios::eofbit) 
+    cout << "EOF encountered\n";
+  else if(i & ios::failbit)
+    cout << "Non-Fatal I/O error\n";
+  else if(i & ios::badbit)
+    cout << "Fatal I/O error\n";
+}
+
+listing 25
+#include <iostream>
+#include <fstream>
+using namespace std;
+
+int main(int argc, char *argv[])
+{
+  char ch;
+
+  if(argc!=2) {
+    cout << "PR: <filename>\n";
+    return 1;
+  }
+
+  ifstream in(argv[1]);
+
+  if(!in) {
+    cout << "Cannot open input file.\n";
+    return 1;
+  }
+
+  while(!in.eof()) { 
+    in.get(ch);
+    // check for error
+    if(!in.good() && !in.eof()) {
+      cout << "I/O Error...terminating\n";
+      return 1;
+    }
+    cout << ch;
+  }
+
+  in.close();
+
+  return 0;
+}
+
+listing 26
+#include <iostream>
+#include <fstream>
+using namespace std;
+
+class coord {
+  int x, y;
+public:
+  coord(int i, int j) { x = i; y = j; }
+  friend ostream &operator<<(ostream &stream, coord ob);
+  friend istream &operator>>(istream &stream, coord &ob);
+};
+
+ostream &operator<<(ostream &stream, coord ob)
+{
+  stream << ob.x << ' ' << ob.y << '\n';
+
+  return stream;
+}
+
+istream &operator>>(istream &stream, coord &ob)
+{
+  stream >> ob.x >> ob.y;
+
+  return stream;
+}
+
+int main()
+{
+  coord o1(1, 2), o2(3, 4);
+  ofstream out("test");
+
+  if(!out) {
+    cout << "Cannot open output file.\n";
+    return 1;
+  }
+
+  out << o1 << o2;
+
+  out.close();
+
+  ifstream in("test");
+
+  if(!in) {
+    cout << "Cannot open input file.\n";
+    return 1;
+  }
+
+  coord o3(0, 0), o4(0, 0);
+  in >> o3 >> o4;
+
+  cout << o3 << o4;
+
+  in.close();
+
+  return 0;
+}
+
+listing 27
+#include <iostream>
+#include <fstream>
+#include <iomanip>
+using namespace std;
+
+// Attention:
+ostream &atn(ostream &stream)
+{
+  stream << "Attention: ";
+  return stream;
+}
+
+// Please note:
+ostream &note(ostream &stream)
+{
+  stream << "Please Note: ";
+  return stream;
+}
+
+int main()
+{
+  ofstream out("test");
+
+  if(!out) {
+    cout << "Cannot open output file.\n";
+    return 1;
+  }
+
+  // write to screen
+  cout << atn << "High voltage circuit\n";
+  cout << note << "Turn off all lights\n";
+
+  // write to file
+  out << atn << "High voltage circuit\n";
+  out << note << "Turn off all lights\n";
+
+  out.close();
+
+  return 0;
+}
+
+listing 28
+#include <fstream>
+#include <iostream>
+#include <cstring>
+using namespace std;
+
+#define SIZE 40
+
+class inventory {
+  char item[SIZE]; // name of item
+  int onhand; // number on hand
+  double cost;  // cost of item
+public:
+  inventory(char *i, int o, double c)
+  {
+    strcpy(item, i);
+    onhand = o;
+    cost = c;
+  }
+  void store(fstream &stream);
+  void retrieve(fstream &stream);
+  friend ostream &operator<<(ostream &stream, inventory ob);
+  friend istream &operator>>(istream &stream, inventory &ob);
+};
+
+ostream &operator<<(ostream &stream, inventory ob)
+{
+  stream << ob.item << ": " << ob.onhand;
+  stream << " on hand at $" << ob.cost << '\n';
+
+  return stream;
+}
+
+istream &operator>>(istream &stream, inventory &ob)
+{
+  cout << "Enter item name: ";
+  stream >> ob.item;
+  cout << "Enter number on hand: ";
+  stream >> ob.onhand;
+  cout << "Enter cost: ";
+  stream >> ob.cost;
+
+  return stream;
+}
+
