@@ -1,0 +1,598 @@
+listing 1
+/* 
+   A traditional-style C++ program.
+*/
+
+#include <iostream.h>
+ 
+int main()
+{
+  /* program code */
+  return 0;
+}
+
+listing 2
+/* 
+   A modern-style C++ program that uses
+   the new-style headers and a namespace. 
+*/
+#include <iostream>
+using namespace std;
+
+int main()
+{
+  /* program code */
+  return 0;
+}
+
+listing 3
+#include <stdio.h>
+
+listing 4
+#include <iostream.h>
+
+listing 5
+using namespace std;
+
+listing 6
+#include <iostream>
+using namespace std;
+
+listing 7
+#include <iostream.h>
+
+listing 8
+cout << "This string is output to the screen.\n";
+
+listing 9
+cout << 100.99;
+
+listing 10
+int num;
+cin >> num;
+
+listing 11
+#include <iostream>
+using namespace std;
+
+int main()
+{
+  int i, j;
+  double d;
+
+  i = 10;
+  j = 20;
+  d = 99.101;
+
+  cout << "Here are some values: ";
+  cout << i;
+  cout << ' ';
+  cout << j;
+  cout << ' ';
+  cout << d;
+
+  return 0;
+}
+
+listing 12
+#include <iostream>
+using namespace std;
+
+int main()
+{
+  int i, j;
+  double d;
+
+  i = 10;
+  j = 20;
+  d = 99.101;
+
+  cout << "Here are some values: ";
+  cout << i << ' ' << j << ' ' << d;
+
+  return 0;
+}
+
+listing 13
+cout << i << ' '<< j << ' ' << d;	
+
+listing 14
+#include <iostream>
+using namespace std;
+
+int main()
+{
+  int i;
+
+  cout << "Enter a value: ";
+  cin >> i;
+  cout << "Here's your number: " << i << "\n";
+
+  return 0;
+}
+
+listing 15
+#include <iostream>
+using namespace std;
+
+int main()
+{
+  int i;
+  float f;
+  char s[80];
+
+  cout << "Enter an integer, float, and string: ";
+  cin >> i >> f >> s;
+  cout << "Here's your data: ";
+  cout << i << ' ' << f << ' ' << s;
+
+  return 0;
+}
+
+listing 16
+#include <iostream>
+using namespace std;
+
+int main()
+{
+  char ch;
+
+  cout << "Enter keys, x to stop.\n";
+
+  do {
+    cout << ": ";
+    cin >> ch;
+  } while (ch != 'x');
+
+  return 0;
+}
+
+listing 17
+/* Convert this C program into C++ style. 
+   This program computes the lowest common
+   denominator.
+*/
+#include <stdio.h>
+
+int main(void)
+{
+  int a, b, d, min;
+
+  printf("Enter two numbers: ");
+  scanf("%d%d", &a, &b);
+  min = a > b ? b : a;
+  for(d = 2; d<min; d++) 
+    if(((a%d)==0) && ((b%d)==0)) break;
+  if(d==min) {
+    printf("No common denominators\n");
+    return 0;
+  }
+  printf("The lowest common denominator is %d\n", d);
+  return 0;
+}
+
+listing 18
+/*
+   This is a C-like comment.
+
+   This program determines whether
+   an integer is odd or even.
+*/
+
+#include <iostream>
+using namespace std;
+
+int main()
+{
+  int num;  // this is a C++, single-line comment
+
+  // read the number  
+  cout << "Enter number to be tested: ";
+  cin >> num;
+
+  // see if even or odd
+  if((num%2)==0) cout << "Number is even\n";
+  else cout << "Number is odd\n";
+
+  return 0;
+}
+
+listing 19
+/* This is a multiline comment
+   inside of which // is nested a single-line comment.
+   Here is the end of the multiline comment.
+*/
+
+listing 20
+// This is a strange /* way to do a comment */
+
+listing 21
+class myclass {
+  // private to myclass
+  int a;
+public:
+  void set_a(int num);
+  int get_a();
+};
+
+listing 22
+void myclass::set_a(int num)
+{
+  a = num;
+}
+
+int myclass::get_a()
+{
+  return a;
+}
+
+listing 23
+myclass ob1, ob2; // these are objects of type myclass
+
+listing 24
+ob1.set_a(10); // sets ob1's version of a to 10
+ob2.set_a(99); // sets ob2's version of a to 99
+
+listing 25
+#include <iostream>
+using namespace std;
+
+class myclass {
+  // private to myclass
+  int a;
+public:
+  void set_a(int num);
+  int get_a();
+};
+
+void myclass::set_a(int num)
+{
+  a = num;
+}
+
+int myclass::get_a()
+{
+  return a;
+}
+
+int main()
+{
+  myclass ob1, ob2;
+
+  ob1.set_a(10);
+  ob2.set_a(99);
+
+  cout << ob1.get_a() << "\n";
+  cout << ob2.get_a() << "\n";
+  return 0;
+}
+
+listing 26
+// This fragment contains an error.
+#include <iostream>
+using namespace std;
+
+int main()
+{
+  myclass ob1, ob2;
+
+  ob1.a = 10; // ERROR! cannot access private member
+  ob2.a = 99; // by non-member functions.
+
+  cout << ob1.get_a() << "\n";
+  cout << ob2.get_a() << "\n";
+
+  return 0;
+}
+
+listing 27
+#include <iostream>
+using namespace std;
+
+class myclass {
+public:
+  // now a is public
+  int a;
+  // and there is no need for set_a() or get_a()
+};
+
+int main()
+{
+  myclass ob1, ob2;
+
+  // here, a is accessed directly
+  ob1.a = 10;
+  ob2.a = 99;
+
+  cout << ob1.a << "\n";
+  cout << ob2.a << "\n";
+
+  return 0;
+}
+
+listing 28
+#include <iostream>
+using namespace std;
+
+#define SIZE 10
+
+// Declare a stack class for characters
+class stack { 
+  char stck[SIZE]; // holds the stack
+  int tos; // index of top-of-stack
+
+public:
+  void init(); // initialize stack
+  void push(char ch); // push character on stack
+  char pop(); // pop character from stack
+};
+
+// Initialize the stack
+void stack::init()
+{
+  tos = 0;
+}
+
+// Push a character.
+void stack::push(char ch)
+{
+  if(tos==SIZE) {
+    cout << "Stack is full";
+    return;
+  }
+  stck[tos] = ch;
+  tos++;
+}
+
+// Pop a character.
+char stack::pop()
+{
+  if(tos==0) {
+    cout << "Stack is empty";
+    return 0; // return null on empty stack 
+  }
+  tos--;
+  return stck[tos];
+}
+
+int main()
+{
+  stack s1, s2;  // create two stacks
+  int i;
+  // initialize the stacks
+  s1.init();
+  s2.init();
+
+  s1.push('a');
+  s2.push('x');
+  s1.push('b');
+  s2.push('y');
+  s1.push('c');
+  s2.push('z');
+
+  for(i=0; i<3; i++) cout << "Pop s1: " << s1.pop() << "\n";
+  for(i=0; i<3; i++) cout << "Pop s2: " << s2.pop() << "\n";
+
+  return 0;
+}
+
+listing 29
+char f1(void);
+
+listing 30
+char f1();
+
+listing 31
+char f1();
+char f1(void);
+
+listing 32
+int main(void)
+
+listing 33
+// This program will not compile.
+#include <iostream>
+using namespace std;
+
+int main()
+{
+  int a, b, c;
+
+  cout << "Enter two numbers: ";
+  cin >> a >> b;
+  c = sum(a, b);
+  cout << "Sum is: " << c;
+  
+  return 0;
+}
+
+// This function needs a prototype.
+sum(int a, int b)
+{
+  return a+b;
+}
+
+listing 34
+#include <iostream>
+using namespace std;
+
+int main()
+{
+  int i; // local vars declared at start of block
+
+  cout << "Enter number: ";
+  cin >> i;
+
+  // compute factorial
+  int j, fact=1; // vars declared after action statements
+  
+  for(j=i; j>=1; j--) fact = fact * j;
+
+  cout << "Factorial is " << fact;
+
+  return 0;
+}
+
+listing 35
+#include <iostream>
+using namespace std;
+
+int main()
+{
+  bool outcome;
+
+  outcome = false;
+
+  if(outcome) cout << "true";
+  else cout << "false";
+
+  return 0;
+}
+
+listing 36
+// This program has an error.
+#include <iostream>
+using namespace std;
+
+int main()
+{
+  f();
+
+  return 0;
+}
+
+void f()
+{
+  cout << "this won't work";
+}
+
+listing 37
+#include <iostream>
+using namespace std;
+
+// Overload abs() three ways
+int abs(int n);
+long abs(long n);
+double abs(double n);
+
+int main()
+{
+  cout << "Absolute value of -10: " << abs(-10) << "\n\n";
+  cout << "Absolute value of -10L: " << abs(-10L) << "\n\n";
+  cout << "Absolute value of -10.01: " << abs(-10.01) << "\n\n";
+
+  return 0;
+}
+
+// abs() for ints
+int abs(int n)
+{
+  cout << "In integer abs()\n";
+  return n<0 ? -n : n;
+}
+
+// abs() for longs
+long abs(long n)
+{
+  cout << "In long abs()\n";
+  return n<0 ? -n : n;
+}
+
+// abs() for doubles
+double abs(double n)
+{
+  cout << "In double abs()\n";
+  return n<0 ? -n : n;
+}
+
+listing 38
+#include <iostream>
+using namespace std;
+
+void date(char *date); // date as a string
+void date(int month, int day, int year); // date as numbers
+
+int main()
+{
+  date("8/23/99");
+  date(8, 23, 99);
+
+  return 0;
+}
+
+// Date as string.
+void date(char *date)
+{
+  cout << "Date: " << date << "\n";
+}
+
+// Date as integers.
+void date(int month, int day, int year)
+{
+  cout << "Date: " << month << "/";
+  cout << day << "/" << year << "\n";
+}
+
+listing 39
+#include <iostream>
+using namespace std;
+
+void f1(int a);
+void f1(int a, int b);
+
+int main()
+{
+  f1(10);
+  f1(10, 20);
+
+  return 0;
+}
+
+void f1(int a)
+{
+  cout << "In f1(int a)\n";
+}
+
+void f1(int a, int b)
+{
+  cout << "In f1(int a, int b)\n";
+}
+
+
+listing 40
+// This is incorrect and will not compile.
+int f1(int a);
+double f1(int a);
+.
+.
+.
+f1(10); // which function does the compiler call???
+
+listing 41
+sleep(10);
+sleep("10");
+
+listing 42
+char s1[80], s2[80];
+strcpy(s1, "hello");
+rev_str(s1, s2); // reversed string goes in s2, s1 untouched
+rev_str(s1); // reversed string is returned in s1
+
+listing 43
+#include <iostream>
+using namespace std;
+
+int f(int a);
+
+int main()
+{
+  cout << f(10);
+
+  return 0;
+}
+
+int f(int a)
+{
+  return a * 3.1416;
+}
+
