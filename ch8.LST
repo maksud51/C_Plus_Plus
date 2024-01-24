@@ -1,0 +1,676 @@
+listing 1
+#include <iostream>
+using namespace std;
+
+class A {
+public:
+  A() { cout << "Constructing A\n"; }
+  ~A() { cout << "Destructing A\n"; }
+};
+
+class B : public A {
+public:
+  B() { cout << "Constructing B\n"; }
+  ~B() { cout << "Destructing B\n"; }
+};
+
+class C : public B {
+public:
+  C() { cout << "Constructing C\n"; }
+  ~C() { cout << "Destructing C\n"; }
+};
+
+int main()
+{
+  C ob;
+
+  return 0;
+}
+
+listing 2
+class myclass : public A, public B, public C { ...
+
+listing 3
+#include <iostream>
+using namespace std;
+
+class base {
+  int i, j;
+public:
+  // need constructor
+  void showij() { cout << i << ' ' << j << '\n'; }
+};
+
+class derived : public base {
+  int k;
+public:
+  // need constructor
+  void show() { cout << k << ' '; showij(); }
+};
+
+int main()
+{
+  derived ob(1, 2, 3);
+
+  ob.show();
+
+  return 0;
+}
+
+listing 4
+cout.setf(ios::showbase | ios::hex);
+
+listing 5
+#include <iostream>
+using namespace std;
+
+int main()
+{
+  // display using default settings
+  cout << 123.23 << " hello " << 100 << '\n';
+  cout << 10 << ' ' << -10 << '\n';
+  cout << 100.0 << "\n\n";
+
+  // now, change formats
+  cout.unsetf(ios::dec); // not required by all compilers
+  cout.setf(ios::hex | ios::scientific);
+  cout << 123.23 << " hello " << 100 << '\n';
+
+  cout.setf(ios::showpos);
+  cout << 10 << ' ' << -10 << '\n';
+
+  cout. setf(ios::showpoint | ios::fixed);
+  cout << 100.0;
+
+  return 0;
+}
+
+listing 6
+#include <iostream>
+using namespace std;
+
+int main()
+{
+  cout.unsetf(ios::dec);
+  cout.setf(ios::uppercase | ios::showbase | ios::hex);
+
+  cout << 88 << '\n';
+
+  cout.unsetf(ios::uppercase);
+
+  cout << 88 << '\n';
+
+  return 0;
+}
+
+listing 7
+#include <iostream>
+using namespace std;
+
+void showflags();
+
+int main()
+{
+  // show default condition of format flags
+  showflags();
+
+  cout.setf(ios::oct | ios::showbase | ios::fixed);
+
+  showflags();
+
+  return 0; 
+}
+
+// This function displays the status of the format flags.
+void showflags()
+{
+  ios::fmtflags f;
+
+  f = cout.flags();  // get flag settings
+  
+  if(f & ios::skipws) cout << "skipws on\n";
+  else cout << "skipws off\n";
+
+  if(f & ios::left) cout << "left on\n";
+  else cout << "left off\n";
+
+  if(f & ios::right) cout << "right on\n";
+  else cout << "right off\n";
+
+  if(f & ios::internal) cout << "internal on\n";
+  else cout << "internal off\n";
+
+  if(f & ios::dec) cout << "dec on\n";
+  else cout << "dec off\n";
+
+  if(f & ios::oct) cout << "oct on\n";
+  else cout << "oct off\n";
+
+  if(f & ios::hex) cout << "hex on\n";
+  else cout << "hex off\n";
+
+  if(f & ios::showbase) cout << "showbase on\n";
+  else cout << "showbase off\n";
+
+  if(f & ios::showpoint) cout << "showpiont on\n";
+  else cout << "showpoint off\n";
+
+  if(f & ios::showpos) cout << "showpos on\n";
+  else cout << "showpos off\n";
+
+  if(f & ios::uppercase) cout << "uppercase on\n";
+  else cout << "uppercase off\n";
+
+  if(f & ios::scientific) cout << "scientific on\n";
+  else cout << "scientific off\n";
+
+  if(f & ios::fixed) cout << "fixed on\n";
+  else cout << "fixed off\n";
+
+  if(f & ios::unitbuf) cout << "unitbuf on\n";
+  else cout << "unitbuf off\n";
+
+  if(f & ios::boolalpha) cout << "boolalpha on\n";
+  else cout << "boolalpha off\n";
+
+  cout << "\n";
+}
+
+listing 9
+#include <iostream>
+using namespace std;
+
+void showflags() ;
+
+int main()
+{
+  // show default condition of format flags
+  showflags();
+
+  // showpos, showbase, oct, right are on, others off
+  ios::fmtflags f = ios::showpos | ios::showbase |
+                    ios::oct | ios::right;
+
+  cout.flags(f);  // set flags
+
+  showflags();
+
+  return 0; 
+}
+
+listing 10
+#include <iostream>
+using namespace std;
+
+int main()
+{
+  cout.width(10);          // set minimum field width
+  cout << "hello" << '\n'; // right justify by default
+  cout.fill('%');          // set fill character
+  cout.width(10);          // set width
+  cout << "hello" << '\n'; // right justify by default
+  cout.setf(ios::left);    // left justify
+  cout.width(10);          // set width
+  cout << "hello" << '\n'; // output left justified
+
+  cout.width(10);          // set width
+  cout.precision(10);      // set 10 digits of precision
+  cout << 123.234567 << '\n'; 
+  cout.width(10);          // set width
+  cout.precision(6);       // set 6 digits of precision
+  cout << 123.234567 << '\n'; 
+
+  return 0;
+}
+
+listing 11
+// Create a table of square roots and squares.
+#include <iostream>
+#include <cmath>
+using namespace std;
+
+int main()
+{
+  double x;
+
+  cout.precision(4);
+  cout << "      x   sqrt(x)     x^2\n\n";
+
+  for(x = 2.0; x <= 20.0; x++) {
+    cout.width(7);
+    cout << x << "  ";
+    cout.width(7);
+    cout << sqrt(x) << "  ";
+    cout.width(7);
+    cout << x*x << '\n';
+  }
+ 
+  return 0;
+}
+
+listing 12
+cout << oct << 100 << hex << 100;
+cout << setw(10) << 100;
+
+listing 13
+#include <iostream>
+#include <iomanip>
+using namespace std;
+
+int main()
+{
+  cout << hex << 100 << endl;
+  cout << oct << 10 << endl;
+
+  cout << setfill('X') << setw(10);
+  cout << 100 << " hi " << endl;
+
+  return 0;
+}
+
+listing 14
+/* This version uses I/O manipulators to display 
+   the table of squares and square roots. */
+#include <iostream>
+#include <iomanip>
+#include <cmath>
+using namespace std;
+
+int main()
+{
+  double x;
+
+  cout << setprecision(4);
+  cout << "      x   sqrt(x)     x^2\n\n";
+
+  for(x = 2.0; x <= 20.0; x++) {
+    cout << setw(7) << x << "  ";
+    cout << setw(7) << sqrt(x) << "  ";
+    cout << setw(7) << x*x << '\n';
+  }
+ 
+  return 0;
+}
+
+listing 15
+// Demonstrate boolalpha format flag.
+#include <iostream>
+using namespace std;
+
+int main()
+{
+  bool b;
+
+  cout << "Before setting boolalpha flag: ";
+  b = true;
+  cout << b << " ";
+  b = false;
+  cout << b << endl;
+
+  cout << "After setting boolalpha flag: ";
+  b = true;
+  cout << boolalpha << b << " ";
+  b = false;
+  cout << b << endl;
+
+  cout << "Enter a Boolean value: ";
+  cin >> boolalpha >> b; // you can enter true or false
+  cout << "You entered " << b;
+
+  return 0;
+}
+
+listing 16
+cout << ob1 << ob2 << ob2;
+
+listing 17
+// Use a friend inserter for objects of type coord.
+#include <iostream>
+using namespace std;
+
+class coord {
+  int x, y;
+public:
+  coord() { x = 0; y = 0; }
+  coord(int i, int j) { x = i; y = j; }
+  friend ostream &operator<<(ostream &stream, coord ob);
+};
+
+ostream &operator<<(ostream &stream, coord ob)
+{
+  stream << ob.x << ", " << ob.y << '\n';
+  return stream;
+}
+
+int main()
+{
+  coord a(1, 1), b(10, 23);
+
+  cout << a << b;
+
+  return 0;
+}
+
+listing 18
+ostream &operator<<(ostream &stream, coord ob)
+{
+  cout << ob.x << ", " << ob.y << '\n';
+  return stream;
+}
+
+listing 19
+/* Create an inserter for objects of type coord, using
+   a non-friend inserter. */
+
+#include <iostream>
+using namespace std;
+
+class coord {
+public:
+  int x, y;  // must be public
+  coord() { x = 0; y = 0; }
+  coord(int i, int j) { x = i; y = j; }
+};
+
+// An inserter for the coord class.
+ostream &operator<<(ostream &stream, coord ob)
+{
+  stream << ob.x << ", " << ob.y << '\n';
+  return stream;
+}
+
+int main()
+{
+  coord a(1, 1), b(10, 23);
+  cout << a << b;
+
+  return 0;
+}
+
+listing 20
+// This program draws right triangles
+#include <iostream>
+using namespace std;
+
+class triangle {
+  int height, base;
+public:
+  triangle(int h, int b) { height = h; base = b; }
+  friend ostream &operator<<(ostream &stream, triangle ob);
+};
+
+// Draw a triangle.
+ostream &operator<<(ostream &stream, triangle ob)
+{
+  int i, j, h, k;
+
+  i = j = ob.base-1;
+  for(h=ob.height-1; h; h--) {
+    for(k=i; k; k--) 
+      stream << ' ';
+    stream << '*';
+    
+    if(j!=i) {
+      for(k=j-i-1; k; k--)
+        stream << ' ';
+      stream << '*';
+    }
+
+    i--;
+    stream << '\n';
+  }
+  for(k=0; k<ob.base; k++) stream << '*';
+  stream << '\n';
+
+  return stream;
+}
+
+int main()
+{
+  triangle t1(5, 5), t2(10, 10), t3(12, 12);
+
+  cout << t1;
+  cout << endl << t2 << endl << t3;
+
+  return 0;
+}
+
+listing 21
+#include <iostream>
+#include <cstring>
+#include <cstdlib>
+using namespace std;
+
+class strtype {
+  char *p;
+  int len;
+public:
+  strtype(char *ptr);
+  ~strtype() {delete [] p;}
+  friend ostream &operator<<(ostream &stream, strtype &ob);
+};
+
+strtype::strtype(char *ptr)
+{
+  len = strlen(ptr)+1;
+  p = new char [len];
+  if(!p) {
+    cout << "Allocation error\n";
+    exit(1);
+  }
+  strcpy(p, ptr);
+}
+
+// Create operator<< inserter function here.
+
+int main()
+{
+  strtype s1("This is a test."), s2("I like C++.");
+
+  cout << s1 << '\n' << s2;
+
+  return 0;
+}
+
+listing 22
+#include <iostream>
+using namespace std;
+
+class planet {
+protected:
+  double distance; // miles from the sun
+  int revolve;  // in days
+public:
+  planet(double d, int r) { distance = d; revolve = r; }
+};
+
+class earth : public planet {
+  double circumference; // circumference of orbit
+public:
+  earth(double d, int r) : planet(d, r) {
+    circumference = 2*distance*3.1416;
+  }
+
+  /* Rewrite this so that it displays the information using
+     an inserter function. */
+  void show() {
+    cout << "Distance from sun: " << distance << '\n';
+    cout << "Days in obit: " << revolve << '\n';
+    cout << "Circumference of orbit: " << circumference << '\n';
+  }
+};
+
+int main()
+{
+  earth ob(93000000, 365);
+
+  cout << ob;
+
+  return 0;
+}
+
+listing 23
+// Add a friend extractor for objects of type coord.
+#include <iostream>
+using namespace std;
+
+class coord {
+  int x, y;
+public:
+  coord() { x = 0; y = 0; }
+  coord(int i, int j) { x = i; y = j; }
+  friend ostream &operator<<(ostream &stream, coord ob);
+  friend istream &operator>>(istream &stream, coord &ob);
+};
+
+ostream &operator<<(ostream &stream, coord ob)
+{
+  stream << ob.x << ", " << ob.y << '\n';
+  return stream;
+}
+
+istream &operator>>(istream &stream, coord &ob)
+{
+  cout << "Enter coordinates: ";
+  stream >> ob.x >> ob.y;
+  return stream;
+}
+
+int main()
+{
+  coord a(1, 1), b(10, 23);
+
+  cout << a << b;
+
+  cin >> a;
+  cout << a;
+
+  return 0;
+}
+
+listing 24
+#include <iostream>
+#include <cstring>
+using namespace std;
+
+class inventory {
+  char item[40]; // name of item
+  int onhand; // number on hand
+  double cost;  // cost of item
+public:
+  inventory(char *i, int o, double c)
+  {
+    strcpy(item, i);
+    onhand = o;
+    cost = c;
+  }
+  friend ostream &operator<<(ostream &stream, inventory ob);
+  friend istream &operator>>(istream &stream, inventory &ob);
+};
+
+ostream &operator<<(ostream &stream, inventory ob)
+{
+  stream << ob.item << ": " << ob.onhand;
+  stream << " on hand at $" << ob.cost << '\n';
+
+  return stream;
+}
+
+istream &operator>>(istream &stream, inventory &ob)
+{
+  cout << "Enter item name: ";
+  stream >> ob.item;
+  cout << "Enter number on hand: ";
+  stream >> ob.onhand;
+  cout << "Enter cost: ";
+  stream >> ob.cost;
+
+  return stream;
+}
+
+int main()
+{
+  inventory ob("hammer", 4, 12.55);
+
+  cout << ob;
+
+  cin >> ob;
+
+  cout << ob;
+
+  return 0;
+}
+
+listing 25
+class pwr {
+  int base;
+  int exponent;
+  double result; // base to the exponent power
+public:
+  pwr(int b, int e);
+};
+
+pwr::pwr(int b, int e)
+{
+  base = b;
+  exponent = e;
+
+  result = 1;
+  for( ; e; e--) result = result * base;
+}
+
+listing 26
+#include <iostream>
+using namespace std;
+
+#define SIZE 10
+
+// Declare a stack class for characters
+class stack { 
+  char stck[SIZE]; // holds the stack
+  int tos; // index of top-of-stack
+public:
+  stack(); 
+  void push(char ch); // push character on stack
+  char pop(); // pop character from stack
+};
+
+// Initialize the stack
+stack::stack()
+{
+  tos = 0;
+}
+
+// Push a character.
+void stack::push(char ch)
+{
+  if(tos==SIZE) {
+    cout << "Stack is full\n";
+    return;
+  }
+  stck[tos] = ch;
+  tos++;
+}
+
+// Pop a character.
+char stack::pop()
+{
+  if(tos==0) {
+    cout << "Stack is empty\n";
+    return 0; // return null on empty stack 
+  }
+  tos--;
+  return stck[tos];
+}
+
+listing 27
+class ft_to_inches {
+  double feet;
+  double inches;
+public:
+  void set(double f) {
+    feet = f;
+    inches = f * 12;
+  }
+};
+
