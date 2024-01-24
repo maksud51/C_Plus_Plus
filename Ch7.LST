@@ -1,0 +1,1026 @@
+listing 1
+#include <iostream>
+using namespace std;
+
+class array {
+  int nums[10];
+public:
+  array();
+  void set(int n[10]);
+  void show();
+  array operator+(array ob2);
+  array operator-(array ob2);
+  int operator==(array ob2);
+};
+
+array::array()
+{
+  int i;
+  for(i=0; i<10; i++) nums[i] = 0;
+}  
+
+void array::set(int *n)
+{
+  int i;
+  
+  for(i=0; i<10; i++) nums[i] = n[i];
+}
+
+void array::show()
+{
+  int i;
+
+  for(i=0; i<10; i++) 
+    cout << nums[i] << ' ';
+
+  cout << "\n";
+}
+
+// Fill in operator functions.
+ 
+int main()
+{
+  array o1, o2, o3;
+
+  int i[10] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
+
+  o1.set(i);
+  o2.set(i);
+
+  o3 = o1 + o2;
+  o3.show();
+
+  o3 = o1 - o3;
+  o3.show();
+
+  if(o1==o2) cout << "o1 equals o2\n";
+  else cout << "o1 does not equal o2\n";
+
+  if(o1==o3) cout << "o1 equals o3\n";
+  else cout << "o1 does not equal o3\n";
+
+  return 0;
+}
+
+listing 2
+#include <iostream>
+using namespace std;
+
+class base {
+  int x;
+public:
+  void setx(int n) { x = n; }
+  void showx() { cout << x << '\n'; }
+};
+
+// Inherit as public.
+class derived : public base {
+  int y;
+public:
+  void sety(int n) { y = n; }
+  void showy() { cout << y << '\n'; }
+};
+ 
+int main()
+{
+  derived ob;
+
+  ob.setx(10); // access member of base class
+  ob.sety(20); // access member of derived class
+
+  ob.showx(); // access member of base class
+  ob.showy(); // access member of derived class
+
+  return 0;
+}
+
+listing 3
+class base {
+  int x;
+public:
+  void setx(int n) { x = n; }
+  void showx() { cout << x << '\n'; }
+};
+
+// Inherit as public - this has an error!
+class derived : public base {
+  int y;
+public:
+  void sety(int n) { y = n; }
+
+  /* Cannot access private member of base class.
+     x is a private member of base and not available
+     within derived. */
+  void show_sum() { cout << x+y << '\n'; } // Error!
+
+  void showy() { cout << y << '\n'; }
+};
+
+listing 4
+// This program contains an error.
+#include <iostream>
+using namespace std;
+
+class base {
+  int x;
+public:
+  void setx(int n) { x = n; }
+  void showx() { cout << x << '\n'; }
+};
+
+// Inherit base as private.
+class derived : private base {
+  int y;
+public:
+  void sety(int n) { y = n; }
+  void showy() { cout << y << '\n'; }
+};
+ 
+int main()
+{
+  derived ob;
+
+  ob.setx(10); // ERROR - now private to derived class
+  ob.sety(20); // access member of derived class - OK
+
+  ob.showx(); // ERROR - now private to derived class
+  ob.showy(); // access member of derived class - OK
+
+  return 0;
+}
+
+listing 5
+base base_ob;
+
+base_ob.setx(1); // is legal because base_ob is of type base
+
+listing 6
+// This program is fixed.
+#include <iostream>
+using namespace std;
+
+class base {
+  int x;
+public:
+  void setx(int n) { x = n; }
+  void showx() { cout << x << '\n'; }
+};
+
+// Inherit base as private.
+class derived : private base {
+  int y;
+public:
+  // setx is accessible from within derived
+  void setxy(int n, int m) { setx(n); y = m; }
+  // showx is accessible from within derived
+  void showxy() { showx(); cout << y << '\n'; }
+};
+ 
+int main()
+{
+  derived ob;
+
+  ob.setxy(10, 20); 
+
+  ob.showxy();
+
+  return 0;
+}
+
+listing 7
+#include <iostream>
+using namespace std;
+
+class mybase {
+  int a, b;
+public:
+  int c;
+  void setab(int i, int j) { a = i; b = j; }
+  void getab(int &i, int &j) { i = a; j = b; }
+};
+
+class derived1 : public mybase {
+// ...
+};
+
+class derived2 : private mybase {
+// ...
+};
+
+int main()
+{
+  derived1 o1;
+  derived2 o2;
+  int i, j;
+  
+  // ...
+}
+
+listing 8
+#include <iostream>
+using namespace std;
+
+class samp {
+  // private by default
+  int a;
+protected: // still private relative to samp
+  int b;
+public:
+  int c; 
+
+  samp(int n, int m) { a = n; b = m; }
+  int geta() { return a; }
+  int getb() { return b; }
+};
+
+int main()
+{
+  samp ob(10, 20);
+
+  // ob.b = 99;  Error! b is protected and thus private
+  ob.c = 30; // OK, c is public
+
+  cout << ob.geta() << ' ';
+  cout << ob.getb() << ' ' << ob.c << '\n';
+
+  return 0;
+}
+
+listing 9
+#include <iostream>
+using namespace std;
+
+class base {
+protected:  // private to base
+  int a, b; // but still accessible by derived
+public:
+  void setab(int n, int m) { a = n; b = m; }
+};
+
+class derived : public base {
+  int c;
+public:
+  void setc(int n) { c = n; }
+
+  // this function has access to a and b from base
+  void showabc() { 
+    cout << a << ' ' << b << ' ' << c << '\n'; 
+  }
+};
+
+int main()
+{
+  derived ob;
+
+  /* a and b are not accessible here because they are 
+     private to both base and derived. */
+
+  ob.setab(1, 2); 
+  ob.setc(3);
+  
+  ob.showabc(); 
+
+  return 0;
+}
+
+listing 10
+// This program will not compile.
+#include <iostream>
+using namespace std;
+
+class base {
+protected:  // private to base
+  int a, b; // but still accessible by derived
+public:
+  void setab(int n, int m) { a = n; b = m; }
+};
+
+class derived : protected base { // inherit as protected
+  int c;
+public:
+  void setc(int n) { c = n; }
+
+  // this function has access to a and b from base
+  void showabc() { 
+    cout << a << ' ' << b << ' ' << c << '\n'; 
+  }
+};
+
+int main()
+{
+  derived ob;
+
+  // ERROR: setab() is now a protected member of base.
+  ob.setab(1, 2); // setab() is not accessible here.
+
+  ob.setc(3);
+  
+  ob.showabc(); 
+
+  return 0;
+}
+
+listing 11
+#include <iostream>
+using namespace std;
+
+class base {
+public:
+  base() { cout << "Constructing base class\n"; }
+  ~base() { cout << "Destructing base class\n"; }
+};
+
+class derived : public base {
+public:
+  derived() { cout << "Constructing derived class\n"; } 
+  ~derived() { cout << "Destructing derived class\n"; }
+};
+
+int main()
+{
+  derived o;
+
+  return 0;
+}
+
+listing 12
+#include <iostream>
+using namespace std;
+
+class base {
+public:
+  base() { cout << "Constructing base class\n"; }
+  ~base() { cout << "Destructing base class\n"; }
+};
+
+class derived : public base {
+  int j;
+public:
+  derived(int n) { 
+    cout << "Constructing derived class\n"; 
+    j = n;
+  } 
+  ~derived() { cout << "Destructing derived class\n"; }
+  void showj() { cout << j << '\n'; }
+};
+
+int main()
+{
+  derived o(10);
+
+  o.showj();
+
+  return 0;
+}
+
+listing 13
+#include <iostream>
+using namespace std;
+
+class base {
+  int i;
+public:
+  base(int n) { 
+    cout << "Constructing base class\n"; 
+    i = n;
+  }
+  ~base() { cout << "Destructing base class\n"; }
+  void showi() { cout << i << '\n'; }
+};
+
+class derived : public base {
+  int j;
+public:
+  derived(int n) : base(n) { // pass arg to base class
+    cout << "Constructing derived class\n"; 
+    j = n;
+  } 
+  ~derived() { cout << "Destructing derived class\n"; }
+  void showj() { cout << j << '\n'; }
+};
+
+int main()
+{
+  derived o(10);
+
+  o.showi();
+  o.showj();
+  
+  return 0;
+}
+
+listing 14
+#include <iostream>
+using namespace std;
+
+class base {
+  int i;
+public:
+  base(int n) { 
+    cout << "Constructing base class\n"; 
+    i = n;
+  }
+  ~base() { cout << "Destructing base class\n"; }
+  void showi() { cout << i << '\n'; }
+};
+
+class derived : public base {
+  int j;
+public:
+  derived(int n, int m) : base(m) { // pass arg to base class
+    cout << "Constructing derived class\n"; 
+    j = n;
+  } 
+  ~derived() { cout << "Destructing derived class\n"; }
+  void showj() { cout << j << '\n'; }
+};
+
+int main()
+{
+  derived o(10, 20);
+
+  o.showi();
+  o.showj();
+  
+  return 0;
+}
+
+listing 15
+class base {
+  int i;
+public:
+  base(int n) { 
+    cout << "Constructing base class\n"; 
+    i = n;
+  }
+  ~base() { cout << "Destructing base class\n"; }
+  void showi() { cout << i << '\n'; }
+};
+
+class derived : public base {
+  int j;
+public:
+  derived(int n) : base(n) { // pass arg to base class
+    cout << "Constructing derived class\n"; 
+    j = 0; // n not used here
+  } 
+  ~derived() { cout << "Destructing derived class\n"; }
+  void showj() { cout << j << '\n'; }
+};
+
+listing 16
+#include <iostream>
+#include <cstring>
+using namespace std;
+
+class mybase {
+  char str[80];
+public:
+  mybase(char *s) { strcpy(str, s); }
+  char *get() { return str; }
+};
+
+class myderived : public mybase {
+  int len;
+public:
+  // add myderived() here
+  int getlen() { return len; }
+  void show() { cout << get() << '\n'; }
+};
+
+int main()
+{
+  myderived ob("hello");
+
+  ob.show();
+  cout << ob.getlen() << '\n';
+ 
+  return 0;
+}
+
+listing 17
+#include <iostream>
+using namespace std;
+
+// A base class for various types of vehicles.
+class vehicle {
+  int num_wheels;
+  int range;
+public:
+  vehicle(int w, int r) 
+  {
+    num_wheels = w; range = r;
+  }
+  void showv() 
+  {
+    cout << "Wheels: " << num_wheels << '\n';
+    cout << "Range: " << range << '\n';
+  }
+};
+
+class car : public vehicle {
+  int passengers;
+public:
+  // insert car() constructor here
+  void show()
+  {
+    showv();
+    cout << "Passengers: " << passengers << '\n';
+  }
+};
+
+class truck : public vehicle {
+  int loadlimit;
+public:
+  // insert truck() constructor here
+  void show()
+  {
+    showv();
+    cout << "loadlimit " << loadlimit << '\n';
+  }
+};
+
+int main()
+{
+  car c(5, 4, 500);
+  truck t(30000, 12, 1200);
+
+  cout << "Car: \n";
+  c.show();
+  cout << "\nTruck:\n";
+  t.show();
+
+  return 0;
+}
+
+listing 18
+car ob(passengers, wheels, range);
+truck ob(loadlimit, wheels, range);
+
+listing 19
+// Multiple Inheritance
+#include <iostream>
+using namespace std;
+
+class B1 {
+  int a;
+public:
+  B1(int x) { a = x; }
+  int geta() { return a; }
+};
+
+// Inherit direct base class.
+class D1 : public B1 {
+  int b;
+public:
+  D1(int x, int y) : B1(y) // pass y to B1
+  {
+    b = x;
+  }
+  int getb() { return b; }
+};
+
+// Inherit a derived class and an indirect base.
+class D2 : public D1 { 
+  int c;
+public:
+  D2(int x, int y, int z) : D1(y, z) // pass args to D1
+  {
+    c = x;
+  }
+
+  /* Because bases inherited as public, D2 has access
+     to public elements of both B1 and D1. */
+  void show() {
+    cout << geta() << ' ' << getb() << ' ';
+    cout << c << '\n';
+  }
+};
+
+int main()
+{
+  D2 ob(1, 2, 3);
+
+  ob.show();
+  // geta() and getb() are still public here
+  cout << ob.geta() << ' ' << ob.getb() << '\n';
+
+  return 0;
+}
+
+listing 20
+#include <iostream>
+using namespace std;
+
+// Create first base class.
+class B1 {
+  int a;
+public:
+  B1(int x) { a = x; }
+  int geta() { return a; }
+};
+
+// Create second base class.
+class B2 {
+  int b;
+public:
+  B2(int x) 
+  {
+    b = x;
+  }
+  int getb() { return b; }
+};
+// Directly inherit two base classes.
+class D : public B1, public B2 { 
+  int c;
+public:
+  // here, z and y are passed directly to B1 and B2
+  D(int x, int y, int z) : B1(z), B2(y)
+  {
+    c = x;
+  }
+
+  /* Because bases inherited as public, D has access
+     to public elements of both B1 and B2. */
+  void show() {
+    cout << geta() << ' ' << getb() << ' ';
+    cout << c << '\n';
+  }
+};
+
+int main()
+{
+  D ob(1, 2, 3);
+
+  ob.show();
+
+  return 0;
+}
+
+listing 21
+#include <iostream>
+using namespace std;
+
+class B1 {
+public:
+  B1() { cout << "Constructing B1\n"; }
+  ~B1() { cout << "Destructing B1\n"; }
+};
+
+class B2 {
+  int b;
+public:
+  B2() { cout << "Constructing B2\n"; }
+  ~B2() { cout << "Destructing B2\n"; }
+};
+
+// Inherit two base classes.
+class D : public B1, public B2 { 
+public:
+  D() { cout << "Constructing D\n"; }
+  ~D() { cout << "Destructing D\n"; }
+};
+
+int main()
+{
+  D ob;
+
+  return 0;
+}
+
+listing 22
+#include <iostream>
+using namespace std;
+
+class A {
+public:
+  A() { cout << "Constructing A\n"; }
+  ~A() { cout << "Destructing A\n"; }
+};
+
+class B {
+public:
+  B() { cout << "Constructing B\n"; }
+  ~B() { cout << "Destructing B\n"; }
+};
+
+class C : public A, public B {
+public:
+  C() { cout << "Constructing C\n"; }
+  ~C() { cout << "Destructing C\n"; }
+};
+
+int main()
+{
+  C ob;
+
+  return 0;
+}
+
+listing 23
+#include <iostream>
+using namespace std;
+
+class A {
+  int i;
+public:
+  A(int a) { i = a; }
+};
+
+class B {
+  int j;
+public:
+  B(int a) { j = a; }
+};
+
+class C : public A, public B {
+  int k;
+public:
+  /* Create C() so that it initializes k
+     and passes arguments to both A() and B() */
+};
+
+listing 24
+// This program uses a virtual base class.
+#include <iostream>
+using namespace std;
+
+class base {
+public:
+  int i;
+};
+
+// Inherit base as virtual.
+class derived1 : virtual public base {
+public:
+  int j;
+};
+
+// Inherit base as virtual, here too.
+class derived2 : virtual public base {
+public:
+  int k;
+};
+
+/* Here, derived3 inherits both derived1 and derived2.
+   However, only one copy of base is present.
+*/
+class derived3 : public derived1, public derived2 {
+public:
+  int product() { return i * j * k; }
+};
+
+int main()
+{
+  derived3 ob;
+
+  ob.i = 10; // unambiguous because only one copy present
+  ob.j = 3;
+  ob.k = 5;
+
+  cout << "Product is " << ob.product() << '\n';
+
+  return 0;
+}
+
+listing 25
+ob.i = 10;
+
+listing 26
+derived1 ob;
+ob.i = 100;
+
+listing 27
+#include <iostream>
+using namespace std;
+
+class planet {
+protected:
+  double distance; // miles from the sun
+  int revolve;  // in days
+public:
+  planet(double d, int r) { distance = d; revolve = r; }
+};
+
+class earth : public planet {
+  double circumference; // circumference of orbit
+public:
+  /* Create earth(double d, int r). Have it pass the
+     distance and days of revolution back to planet. Have
+     it compute the circumference of the orbit. (Hint: 
+     circumference = 2r*3.1416.)
+  */
+  /* Create a function called show() that displays the 
+     information. */
+};
+
+int main()
+{
+  earth ob(93000000, 365);
+
+  ob.show();
+
+  return 0;
+}
+
+listing 28
+/* A variation on the vehicle hierarchy. But 
+   this program contains an error. Fix it. Hint:
+   try compiling it as is and observe the error messages.
+*/
+#include <iostream>
+using namespace std;
+
+// A base class for various types of vehicles.
+class vehicle {
+  int num_wheels;
+  int range;
+public:
+  vehicle(int w, int r) 
+  {
+    num_wheels = w; range = r;
+  }
+  void showv() 
+  {
+    cout << "Wheels: " << num_wheels << '\n';
+    cout << "Range: " << range << '\n';
+  }
+};
+
+enum motor {gas, electric, diesel};
+
+class motorized : public vehicle {
+  enum motor mtr;
+public:
+  motorized(enum motor m, int w, int r) : vehicle(w, r)
+  {
+    mtr = m;
+  }
+  void showm() { 
+    cout << "Motor: ";
+    switch(mtr) {
+      case gas : cout << "Gas\n";
+        break;
+      case electric : cout << "Electric\n";
+        break;
+      case diesel : cout << "Diesel\n";
+        break;
+    }
+  }
+};
+
+class road_use : public vehicle {
+  int passengers;
+public:
+  road_use(int p, int w, int r) : vehicle(w, r)
+  {
+    passengers = p;
+  }
+  void showr()
+  {
+    cout << "Passengers: " << passengers << '\n';
+  }
+};
+
+enum steering { power, rack_pinion, manual };
+
+class car : public motorized, public road_use {
+  enum steering strng;
+public:
+  car(enum steering s, enum motor m, int w, int r, int p) :
+    road_use(p, w, r), motorized(m, w, r), vehicle(w, r)
+  {
+    strng = s;
+  }
+  void show() {
+    showv(); showr(); showm();
+    cout << "Steering: ";
+    switch(strng) {
+      case power : cout << "Power\n";
+        break;
+      case rack_pinion : cout << "Rack and Pinion\n";
+        break;
+      case manual : cout << "Manual\n";
+        break;
+    }
+  }
+};
+  
+int main()
+{
+  car c(power, gas, 4, 500, 5);
+
+  c.show();
+
+  return 0;
+}
+
+listing 29
+/* Overload the +, -, and = relative to coord class. Then,
+   use coord as a base for quad. */
+#include <iostream>
+using namespace std;
+
+class coord {
+public:
+  int x, y; // coordinate values
+  coord() { x=0; y=0; }
+  coord(int i, int j) { x=i; y=j; }
+  void get_xy(int &i, int &j) { i=x; j=y; }
+  coord operator+(coord ob2);
+  coord operator-(coord ob2);
+  coord operator=(coord ob2);
+};
+
+// Overload + relative to coord class.
+coord coord::operator+(coord ob2)
+{
+  coord temp;
+
+  cout << "Using coord operator+()\n";
+
+  temp.x = x + ob2.x;
+  temp.y = y + ob2.y;
+
+  return temp;
+}
+
+// Overload - relative to coord class.
+coord coord::operator-(coord ob2)
+{
+  coord temp;
+
+  cout << "Using coord operator-()\n";
+
+  temp.x = x - ob2.x;
+  temp.y = y - ob2.y;
+
+  return temp;
+}
+
+// Overload = relative to coord.
+coord coord::operator=(coord ob2)
+{
+  cout << "Using coord operator=()\n";
+
+  x = ob2.x;
+  y = ob2.y;
+
+  return *this; // return the object that is assigned to
+}
+
+class quad : public coord {
+  int quadrant;
+public:
+  quad() { x = 0; y = 0; quadrant = 0; }
+  quad(int x, int y) : coord(x, y)
+  {
+    if(x>=0 && y>=0) quadrant = 1;
+    else if(x<0 && y>=0) quadrant = 2;
+    else if(x<0 && y<0) quadrant = 3;
+    else quadrant = 4;
+  }
+  void showq()
+  {  
+     cout << "Point in Quadrant: " << quadrant << '\n'; 
+  }
+  quad operator=(coord ob2);
+};
+
+quad quad::operator=(coord ob2)
+{
+  cout << "Using quad operator=()\n";
+
+  x = ob2.x;
+  y = ob2.y;
+  if(x>=0 && y>=0) quadrant = 1;
+  else if(x<0 && y>=0) quadrant = 2;
+  else if(x<0 && y<0) quadrant = 3;
+  else quadrant = 4;
+
+  return *this;
+}
+  
+int main()
+{
+  quad o1(10, 10), o2(15, 3), o3;
+  int x, y;
+
+  o3 = o1 + o2; // add two objects - this calls operator+()
+  o3.get_xy(x, y);
+  o3.showq();
+  cout << "(o1+o2) X: " << x << ", Y: " << y << "\n";
+
+  o3 = o1 - o2; // subtract two objects
+  o3.get_xy(x, y);
+  o3.showq();
+  cout << "(o1-o2) X: " << x << ", Y: " << y << "\n";
+
+  o3 = o1; // assign an object
+  o3.get_xy(x, y);
+  o3.showq();
+  cout << "(o3=o1) X: " << x << ", Y: " << y << "\n";
+
+  return 0;
+}
+
