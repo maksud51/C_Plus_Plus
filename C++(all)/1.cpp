@@ -2,6 +2,6 @@
 #include <conio.h>
 using namespace std;
 int main(){
-    cout << "Anisul Islam " << " M.Sc. in Software Development";
+    cout << "Maksud Alam " << " B.Sc. in CSE";
     getch();
 }
