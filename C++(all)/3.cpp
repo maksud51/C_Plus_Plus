@@ -10,7 +10,7 @@ comment
 int main()
 {
     // printing my name
-    cout << "Anisul Islam" << endl;
+    cout << "Maksud Alam" << endl;
     // printing my phone
-    cout << "01710444700" << endl;
+    cout << "0171........." << endl;
 }
